@@ -103,6 +103,18 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       []
     );
 
+    // Shake a row to draw attention (e.g. an add/delete that we won't perform).
+    const wiggleRow = React.useCallback((id: string) => {
+      const card = inputs.current[id]?.closest<HTMLElement>('.question-card');
+      if (!card) return;
+      // Remove → reflow → re-add so the shake restarts on repeat triggers,
+      // then clear after the animation's duration (see `question-wiggle`).
+      card.removeAttribute('data-wiggle');
+      card.getBoundingClientRect();
+      card.setAttribute('data-wiggle', 'true');
+      window.setTimeout(() => card.removeAttribute('data-wiggle'), 400);
+    }, []);
+
     const handleTextChange = React.useCallback(
       (id: string, text: string) => {
         commit(questions.map((q) => (q.id === id ? { ...q, text } : q)));
@@ -124,6 +136,11 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           commit(next);
         } else if (e.key === 'Backspace' && questions[index].text === '') {
           e.preventDefault();
+          // Keep at least one row — wiggle the last one instead of deleting it.
+          if (questions.length === 1) {
+            wiggleRow(id);
+            return;
+          }
           const next = questions.slice();
           next.splice(index, 1);
           const focusTarget = next[index - 1]?.id ?? next[index]?.id ?? null;
@@ -131,14 +148,23 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           commit(next);
         }
       },
-      [commit, questions]
+      [commit, questions, wiggleRow]
     );
 
     const handleAdd = React.useCallback(() => {
+      // Don't stack another blank row on top of one that's already empty —
+      // focus the existing empty row and wiggle it to draw attention instead.
+      const empty = questions.find((q) => q.text === '');
+      if (empty) {
+        inputs.current[empty.id]?.focus();
+        wiggleRow(empty.id);
+        return;
+      }
+
       const nid = nanoid();
       pendingFocus.current = nid;
       commit([...questions, { id: nid, text: '' }]);
-    }, [commit, questions]);
+    }, [commit, questions, wiggleRow]);
 
     const handleDragStart = (e: DragStartEvent) => {
       setActiveId(String(e.active.id));
