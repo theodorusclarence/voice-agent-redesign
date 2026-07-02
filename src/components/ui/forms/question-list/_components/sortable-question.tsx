@@ -11,11 +11,13 @@ export function SortableQuestion({
   question,
   onTextChange,
   onKeyDown,
+  onPaste,
   registerInput,
 }: {
   question: Question;
   onTextChange: (id: string, text: string) => void;
   onKeyDown: (id: string, e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onPaste: (id: string, e: React.ClipboardEvent<HTMLInputElement>) => void;
   registerInput: (id: string, el: HTMLInputElement | null) => void;
 }) {
   const {
@@ -52,6 +54,7 @@ export function SortableQuestion({
       inputProps={{
         onChange: (e) => onTextChange(question.id, e.target.value),
         onKeyDown: (e) => onKeyDown(question.id, e),
+        onPaste: (e) => onPaste(question.id, e),
       }}
       handleProps={{
         ref: setActivatorNodeRef,

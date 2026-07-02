@@ -32,6 +32,7 @@ import {
 import { QuestionRow } from './_components/question-row';
 import { SortableQuestion } from './_components/sortable-question';
 import type { Question } from './_components/types';
+import { splitPastedQuestions } from './_utils/split-pasted-questions';
 
 export type { Question } from './_components/types';
 
@@ -151,6 +152,34 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       [commit, questions, wiggleRow]
     );
 
+    // Paste a newline-separated list to create one question per line: the
+    // current caret splits the row, the first line stays put, and the rest are
+    // inserted after it. Single-line pastes fall through to native handling.
+    const handlePaste = React.useCallback(
+      (id: string, e: React.ClipboardEvent<HTMLInputElement>) => {
+        const text = e.clipboardData.getData('text');
+        if (!text.includes('\n')) return;
+        const index = questions.findIndex((q) => q.id === id);
+        if (index === -1) return;
+        e.preventDefault();
+
+        const input = e.currentTarget;
+        const before = input.value.slice(0, input.selectionStart ?? undefined);
+        const after = input.value.slice(input.selectionEnd ?? undefined);
+        const parts = splitPastedQuestions(before, text, after);
+        if (parts.length === 0) return;
+
+        const extra = parts.slice(1).map((t) => ({ id: nanoid(), text: t }));
+        const next = questions.slice();
+        next[index] = { ...next[index], text: parts[0] };
+        next.splice(index + 1, 0, ...extra);
+        // Focus the last row that resulted from the paste, caret at its end.
+        pendingFocus.current = extra.at(-1)?.id ?? id;
+        commit(next);
+      },
+      [commit, questions]
+    );
+
     const handleAdd = React.useCallback(() => {
       // Don't stack another blank row on top of one that's already empty —
       // focus the existing empty row and wiggle it to draw attention instead.
@@ -205,6 +234,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
                   question={question}
                   onTextChange={handleTextChange}
                   onKeyDown={handleKeyDown}
+                  onPaste={handlePaste}
                   registerInput={registerInput}
                 />
               ))}
