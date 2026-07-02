@@ -1,4 +1,5 @@
 import { cn } from 'cnfast';
+import Link from 'next/link';
 import * as React from 'react';
 
 import {
@@ -6,16 +7,14 @@ import {
   getButtonVariant,
 } from '@/components/buttons/class';
 
-export interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
+export interface ButtonLinkProps extends React.ComponentProps<typeof Link> {
   variant: (typeof ButtonVariant)[number];
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, disabled, ...rest }, ref) => {
+export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+  ({ className, variant, ...rest }, ref) => {
     return (
-      <button
-        type='button'
-        disabled={disabled}
+      <Link
         className={cn([getButtonVariant(variant), className])}
         {...rest}
         ref={ref}
@@ -24,6 +23,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
+ButtonLink.displayName = 'ButtonLink';
 
-export default Button;
+export default ButtonLink;
