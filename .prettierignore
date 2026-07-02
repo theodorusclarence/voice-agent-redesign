@@ -39,3 +39,4 @@ yarn-error.log*
 CHANGELOG.md
 
 pnpm-lock.yaml
+next-env.d.ts
