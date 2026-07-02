@@ -32,7 +32,13 @@ import {
 import { QuestionRow } from './_components/question-row';
 import { SortableQuestion } from './_components/sortable-question';
 import type { Question } from './_components/types';
-import { splitPastedQuestions } from './_utils/split-pasted-questions';
+import {
+  addQuestion,
+  insertQuestionAfter,
+  pasteQuestions,
+  type QuestionsAction,
+  removeEmptyQuestion,
+} from './_utils/question-actions';
 
 export type { Question } from './_components/types';
 
@@ -116,6 +122,27 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       window.setTimeout(() => card.removeAttribute('data-wiggle'), 400);
     }, []);
 
+    // Turn a pure QuestionsAction into its effects. The interesting logic lives
+    // in `_utils/question-actions` (and is unit-tested there); this just wires
+    // the result to React state and the focus/wiggle side effects.
+    const applyAction = React.useCallback(
+      (action: QuestionsAction) => {
+        switch (action.type) {
+          case 'commit':
+            pendingFocus.current = action.focusId;
+            commit(action.questions);
+            break;
+          case 'attention':
+            inputs.current[action.id]?.focus();
+            wiggleRow(action.id);
+            break;
+          case 'none':
+            break;
+        }
+      },
+      [commit, wiggleRow]
+    );
+
     const handleTextChange = React.useCallback(
       (id: string, text: string) => {
         commit(questions.map((q) => (q.id === id ? { ...q, text } : q)));
@@ -125,75 +152,39 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
 
     const handleKeyDown = React.useCallback(
       (id: string, e: React.KeyboardEvent<HTMLInputElement>) => {
-        const index = questions.findIndex((q) => q.id === id);
-        if (index === -1) return;
+        const question = questions.find((q) => q.id === id);
+        if (!question) return;
 
         if (e.key === 'Enter') {
           e.preventDefault();
-          const nid = nanoid();
-          const next = questions.slice();
-          next.splice(index + 1, 0, { id: nid, text: '' });
-          pendingFocus.current = nid;
-          commit(next);
-        } else if (e.key === 'Backspace' && questions[index].text === '') {
+          applyAction(insertQuestionAfter(questions, id));
+        } else if (e.key === 'Backspace' && question.text === '') {
           e.preventDefault();
-          // Keep at least one row — wiggle the last one instead of deleting it.
-          if (questions.length === 1) {
-            wiggleRow(id);
-            return;
-          }
-          const next = questions.slice();
-          next.splice(index, 1);
-          const focusTarget = next[index - 1]?.id ?? next[index]?.id ?? null;
-          pendingFocus.current = focusTarget;
-          commit(next);
+          applyAction(removeEmptyQuestion(questions, id));
         }
       },
-      [commit, questions, wiggleRow]
+      [questions, applyAction]
     );
 
-    // Paste a newline-separated list to create one question per line: the
-    // current caret splits the row, the first line stays put, and the rest are
-    // inserted after it. Single-line pastes fall through to native handling.
+    // Newline-separated pastes create one row per line; single-line pastes fall
+    // through to native handling (so the caret/undo behave normally).
     const handlePaste = React.useCallback(
       (id: string, e: React.ClipboardEvent<HTMLInputElement>) => {
         const text = e.clipboardData.getData('text');
         if (!text.includes('\n')) return;
-        const index = questions.findIndex((q) => q.id === id);
-        if (index === -1) return;
         e.preventDefault();
 
         const input = e.currentTarget;
         const before = input.value.slice(0, input.selectionStart ?? undefined);
         const after = input.value.slice(input.selectionEnd ?? undefined);
-        const parts = splitPastedQuestions(before, text, after);
-        if (parts.length === 0) return;
-
-        const extra = parts.slice(1).map((t) => ({ id: nanoid(), text: t }));
-        const next = questions.slice();
-        next[index] = { ...next[index], text: parts[0] };
-        next.splice(index + 1, 0, ...extra);
-        // Focus the last row that resulted from the paste, caret at its end.
-        pendingFocus.current = extra.at(-1)?.id ?? id;
-        commit(next);
+        applyAction(pasteQuestions(questions, id, before, text, after));
       },
-      [commit, questions]
+      [questions, applyAction]
     );
 
     const handleAdd = React.useCallback(() => {
-      // Don't stack another blank row on top of one that's already empty —
-      // focus the existing empty row and wiggle it to draw attention instead.
-      const empty = questions.find((q) => q.text === '');
-      if (empty) {
-        inputs.current[empty.id]?.focus();
-        wiggleRow(empty.id);
-        return;
-      }
-
-      const nid = nanoid();
-      pendingFocus.current = nid;
-      commit([...questions, { id: nid, text: '' }]);
-    }, [commit, questions, wiggleRow]);
+      applyAction(addQuestion(questions));
+    }, [questions, applyAction]);
 
     const handleDragStart = (e: DragStartEvent) => {
       setActiveId(String(e.active.id));
