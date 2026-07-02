@@ -33,6 +33,9 @@
   /* Animation configuration */
   --animate-flicker: flicker 3s linear infinite;
   --animate-shimmer: shimmer 1.3s linear infinite;
+  /* Pickup animation for a dragged question row: eases the rotate, scale, and
+   * shadow from the resting look into the lifted card's static styles. */
+  --animate-question-lift: question-lift 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Animation keyframes */
@@ -67,6 +70,70 @@
   }
   100% {
     background-position: 700px 0;
+  }
+}
+
+/*
+ * Only a `from` keyframe: the animation eases out of the resting look and
+ * hands the row back to its own static (lifted) transform + shadow when it
+ * ends, so no `forwards` fill is needed and the two never fight.
+ */
+@keyframes question-lift {
+  from {
+    transform: rotate(0deg) scale(1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  }
+}
+
+/*
+ * Drop settle. dnd-kit animates only the overlay's position back to the slot;
+ * `.question-drop` is added to the overlay for that same window (via the
+ * dropAnimation side effect), so the card can ease its tilt/scale/shadow back
+ * to resting in step with the positional animation. These rules are unlayered
+ * so they override the Tailwind utilities that set the lifted transform/shadow.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .question-card {
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+.question-drop .question-card {
+  transform: rotate(0deg) scale(1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/*
+ * Attention wiggle. Pressing "Add question" while an empty row already exists
+ * focuses that row instead of adding another and shakes it to draw the eye. It
+ * is triggered imperatively by toggling `data-wiggle` on the card (with a
+ * reflow, so repeated presses restart it). Small amplitude, reduced-motion
+ * gated. The keyframes start and end at translateX(0) so nothing lingers.
+ */
+@keyframes question-wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-5px);
+  }
+  30% {
+    transform: translateX(4px);
+  }
+  45% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-1px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .question-card[data-wiggle='true'] {
+    animation: question-wiggle 400ms ease;
   }
 }
 
