@@ -39,7 +39,6 @@ const FormComponent = <T extends FieldValues>(
 };
 
 const Form = React.forwardRef(FormComponent) as <T extends FieldValues>(
-  // eslint-disable-next-line no-unused-vars
   props: FormProps<T> & { ref?: React.ForwardedRef<HTMLFormElement> }
 ) => React.ReactElement;
 

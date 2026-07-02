@@ -40,6 +40,10 @@ export default [
       ],
 
       //#region  //*=========== Unused Import ===========
+      // Delegated entirely to `unused-imports/no-unused-vars`, which is
+      // `^_`-aware and (unlike the core rule) doesn't flag param names inside
+      // function type signatures like `(value: string) => void`.
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'warn',
       'unused-imports/no-unused-vars': [
