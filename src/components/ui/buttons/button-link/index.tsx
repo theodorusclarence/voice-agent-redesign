@@ -5,7 +5,7 @@ import * as React from 'react';
 import {
   type ButtonVariant,
   getButtonVariant,
-} from '@/components/buttons/class';
+} from '@/components/ui/buttons/class';
 
 export interface ButtonLinkProps extends React.ComponentProps<typeof Link> {
   variant: (typeof ButtonVariant)[number];

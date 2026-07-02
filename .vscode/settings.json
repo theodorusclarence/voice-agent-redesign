@@ -13,5 +13,19 @@
     "classNames",
     "containerClassName"
   ],
+  /** Custom editor labels for Next.js files */
+  "workbench.editor.customLabels.patterns": {
+    "**/index.ts": "${dirname} - index",
+    "**/index.tsx": "${dirname} - index",
+    "**/index.test.ts": "${dirname} - test",
+    "**/index.test.tsx": "${dirname} - test",
+    // helper files
+    "**/helper/index.ts": "${dirname(1)} - helper - index",
+    "**/helper/index.test.ts": "${dirname(1)} - helper - test",
+    "**/helper/index.tsx": "${dirname(1)} - helper - index",
+    "**/helper/index.test.tsx": "${dirname(1)} - helper - test",
+    "**/web/src/pages/**/index.page.tsx": "${dirname} - page",
+    "**/web/src/components/**/index.tsx": "${dirname} - component"
+  },
   "typescript.preferences.importModuleSpecifier": "non-relative"
 }

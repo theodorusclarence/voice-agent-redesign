@@ -1,25 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { ButtonVariant } from '@/components/buttons/class';
+import { ButtonVariant } from '@/components/ui/buttons/class';
 
-import { ButtonLink } from './index';
+import { Button } from './index';
 
 const meta = {
-  title: 'Components/ButtonLink',
-  component: ButtonLink,
+  title: 'Components/Button',
+  component: Button,
   tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
       options: ButtonVariant,
     },
+    disabled: {
+      control: 'boolean',
+    },
   },
   args: {
-    children: 'Button Link',
-    href: '/',
+    children: 'Button',
     variant: 'primary',
   },
-} satisfies Meta<typeof ButtonLink>;
+} satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -42,18 +44,22 @@ export const Ghost: Story = {
   },
 };
 
+export const Disabled: Story = {
+  args: {
+    variant: 'primary',
+    disabled: true,
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className='flex flex-wrap gap-3 p-4'>
-      <ButtonLink href='/' variant='primary'>
-        Primary
-      </ButtonLink>
-      <ButtonLink href='/' variant='secondary'>
-        Secondary
-      </ButtonLink>
-      <ButtonLink href='/' variant='ghost'>
-        Ghost
-      </ButtonLink>
+      <Button variant='primary'>Primary</Button>
+      <Button variant='secondary'>Secondary</Button>
+      <Button variant='ghost'>Ghost</Button>
+      <Button variant='primary' disabled>
+        Disabled
+      </Button>
     </div>
   ),
 };

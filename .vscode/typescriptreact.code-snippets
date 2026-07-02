@@ -179,10 +179,85 @@
     "body": ["{clsx([${TM_SELECTED_TEXT}$0])}"]
   },
   "Wrap with clsxm": {
-    "prefix": "cxm",
-    "body": ["{clsxm([${TM_SELECTED_TEXT}$0, className])}"]
+    "prefix": "cn",
+    "body": ["{cn([${TM_SELECTED_TEXT}$0, className])}"]
   },
   //#endregion  //*======== Snippet Wrap ===========
+
+  //#region  //*=========== Typography ===========
+  "Journal 1": {
+    "prefix": "tj1",
+    "body": ["<Typography variant='j1'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Journal 2": {
+    "prefix": "tj2",
+    "body": ["<Typography variant='j2'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 1": {
+    "prefix": "th1",
+    "body": ["<Typography variant='h1'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 2": {
+    "prefix": "th2",
+    "body": ["<Typography variant='h2'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 3": {
+    "prefix": "th3",
+    "body": ["<Typography variant='h3'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 4": {
+    "prefix": "th4",
+    "body": ["<Typography variant='h4'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 5": {
+    "prefix": "th5",
+    "body": ["<Typography variant='h5'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Heading 6": {
+    "prefix": "th6",
+    "body": ["<Typography variant='h6'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Subtitle 1": {
+    "prefix": "ts1",
+    "body": ["<Typography variant='s1'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Subtitle 2": {
+    "prefix": "ts2",
+    "body": ["<Typography variant='s2'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Subtitle 3": {
+    "prefix": "ts3",
+    "body": ["<Typography variant='s3'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Subtitle 4": {
+    "prefix": "ts4",
+    "body": ["<Typography variant='s4'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Body 1": {
+    "prefix": "tb1",
+    "body": ["<Typography variant='b1'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Body 2": {
+    "prefix": "tb2",
+    "body": ["<Typography variant='b2'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Body 3": {
+    "prefix": "tb3",
+    "body": ["<Typography variant='b3'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Caption 1": {
+    "prefix": "tc1",
+    "body": ["<Typography variant='c1'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Caption 2": {
+    "prefix": "tc2",
+    "body": ["<Typography variant='c2'>${1:${TM_SELECTED_TEXT}}</Typography>"]
+  },
+  "Import Typography": {
+    "prefix": "imtypo",
+    "body": ["import Typography from '@/components/ui/typography';"]
+  },
+  //#endregion  //*======== Typography ===========
 
   "Logger": {
     "prefix": "lg",

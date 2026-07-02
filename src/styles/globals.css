@@ -80,33 +80,59 @@
   }
 
   /* #region  /**=========== Typography =========== */
-  .h0 {
-    @apply font-primary text-3xl font-bold md:text-5xl;
-  }
-
-  h1,
-  .h1 {
-    @apply font-primary text-2xl font-bold md:text-4xl;
-  }
-
-  h2,
-  .h2 {
-    @apply font-primary text-xl font-bold md:text-3xl;
-  }
-
-  h3,
-  .h3 {
-    @apply font-primary text-lg font-bold md:text-2xl;
-  }
-
-  h4,
-  .h4 {
-    @apply font-primary text-base font-bold md:text-lg;
-  }
-
-  body,
-  .p {
+  body {
     @apply font-primary text-sm md:text-base;
+  }
+  .j1 {
+    @apply text-4xl font-bold;
+  }
+  .j2 {
+    @apply text-3xl font-bold;
+  }
+  .h1 {
+    @apply text-2xl font-semibold;
+  }
+  .h2 {
+    @apply text-xl font-semibold;
+  }
+  .h3 {
+    @apply text-lg font-semibold;
+  }
+  .h4 {
+    @apply text-base font-bold;
+  }
+  .h5 {
+    @apply text-base font-semibold;
+  }
+  .h6 {
+    @apply text-sm font-semibold;
+  }
+  .s1 {
+    @apply text-lg font-medium;
+  }
+  .s2 {
+    @apply text-base font-medium;
+  }
+  .s3 {
+    @apply text-sm font-medium;
+  }
+  .s4 {
+    @apply text-xs font-medium;
+  }
+  .b1 {
+    @apply text-lg;
+  }
+  .b2 {
+    @apply font-primary text-base;
+  }
+  .b3 {
+    @apply text-sm font-normal;
+  }
+  .c1 {
+    @apply text-xs;
+  }
+  .c2 {
+    @apply text-[11px] leading-[14px];
   }
   /* #endregion  /**======== Typography =========== */
 
