@@ -91,17 +91,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             !unstyled && [
               'w-full rounded-xl text-sm',
               'border transition',
-              'default-ring',
               // Colors
               [
                 'text-neutral-900 placeholder:text-neutral-400',
 
-                'bg-white hover:bg-white active:bg-white',
+                'bg-white hover:bg-white',
 
                 'focus:outline-none',
+                'focus:ring-0',
                 'border-neutral-200 hover:border-neutral-300 focus:border-primary-600',
-
-                'focus:ring-4 focus:ring-primary-500/[0.16]',
               ],
             ],
 
@@ -111,8 +109,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             !unstyled && [
               // NOTE: Error, disabled, & readOnly should be prioritized
               error && [
-                'border-red-500 hover:border-red-500 focus:border-red-500',
-                'focus:ring-red-500/[0.16]',
+                'border-red-300 hover:border-red-400 focus:border-red-500',
               ],
               disabled && [
                 'cursor-not-allowed text-neutral-400 placeholder:text-neutral-400',
