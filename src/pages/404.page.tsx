@@ -1,14 +1,13 @@
-import { Metadata } from 'next';
+import Head from 'next/head';
 import * as React from 'react';
 import { RiAlarmWarningFill } from 'react-icons/ri';
-
-export const metadata: Metadata = {
-  title: 'Not Found',
-};
 
 export default function NotFound() {
   return (
     <main>
+      <Head>
+        <title>Not Found</title>
+      </Head>
       <section className='bg-white'>
         <div className='layout flex min-h-screen flex-col items-center justify-center text-center text-black'>
           <RiAlarmWarningFill
