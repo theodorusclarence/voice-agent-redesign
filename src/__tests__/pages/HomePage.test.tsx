@@ -8,7 +8,7 @@ describe('Homepage', () => {
   it('renders the Components', () => {
     render(<HomePage />);
 
-    const heading = screen.getByText(/Home/i);
+    const heading = screen.getByText(/Voice Agent Redesign/i);
 
     expect(heading).toBeInTheDocument();
   });
