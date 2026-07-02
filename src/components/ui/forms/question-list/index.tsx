@@ -3,6 +3,7 @@ import {
   defaultDropAnimationSideEffects,
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
@@ -63,6 +64,9 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
     const questions = isControlled ? controlled : uncontrolled;
 
     const [activeId, setActiveId] = React.useState<string | null>(null);
+    // The row currently hovered while dragging — drives the overlay's number so
+    // it previews the projected position and is already correct at release.
+    const [overId, setOverId] = React.useState<string | null>(null);
     const pendingFocus = React.useRef<string | null>(null);
     const inputs = React.useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -188,11 +192,17 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
 
     const handleDragStart = (e: DragStartEvent) => {
       setActiveId(String(e.active.id));
+      setOverId(String(e.active.id));
+    };
+
+    const handleDragOver = (e: DragOverEvent) => {
+      setOverId(e.over ? String(e.over.id) : null);
     };
 
     const handleDragEnd = (e: DragEndEvent) => {
       const { active, over } = e;
       setActiveId(null);
+      setOverId(null);
       if (over && active.id !== over.id) {
         const from = questions.findIndex((q) => q.id === active.id);
         const to = questions.findIndex((q) => q.id === over.id);
@@ -200,7 +210,27 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       }
     };
 
-    const activeQuestion = questions.find((q) => q.id === activeId) ?? null;
+    const handleDragCancel = () => {
+      setActiveId(null);
+      setOverId(null);
+    };
+
+    const activeIndex = questions.findIndex((q) => q.id === activeId);
+    const activeQuestion = activeIndex === -1 ? null : questions[activeIndex];
+    const overIndex = overId ? questions.findIndex((q) => q.id === overId) : -1;
+
+    // While dragging, number every row by its *projected* order — as if the drop
+    // happened now — so the background list and the overlay agree, and the drop
+    // animation already carries the final number (dnd-kit freezes the overlay's
+    // content the instant the pointer is released). The array isn't reordered
+    // until release; SortableContext just shifts the rows, and arrayMove matches
+    // exactly that shift so each row's number lines up with where it sits.
+    const displayOrder =
+      activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex
+        ? arrayMove(questions, activeIndex, overIndex)
+        : questions;
+    const positionById = new Map(displayOrder.map((q, i) => [q.id, i + 1]));
+    const overlayPosition = positionById.get(activeId ?? '') ?? activeIndex + 1;
     const announcements = createDragAnnouncements(questions);
 
     return (
@@ -210,8 +240,9 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           collisionDetection={closestCenter}
           modifiers={[restrictToVerticalAxis, restrictToParentElement]}
           onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
-          onDragCancel={() => setActiveId(null)}
+          onDragCancel={handleDragCancel}
           accessibility={{ announcements, screenReaderInstructions }}
         >
           <SortableContext
@@ -219,10 +250,11 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
             strategy={verticalListSortingStrategy}
           >
             <div className='flex flex-col gap-2'>
-              {questions.map((question) => (
+              {questions.map((question, index) => (
                 <SortableQuestion
                   key={question.id}
                   question={question}
+                  position={positionById.get(question.id) ?? index + 1}
                   onTextChange={handleTextChange}
                   onKeyDown={handleKeyDown}
                   onPaste={handlePaste}
@@ -264,7 +296,11 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
             }}
           >
             {activeQuestion ? (
-              <QuestionRow isOverlay value={activeQuestion.text} />
+              <QuestionRow
+                isOverlay
+                value={activeQuestion.text}
+                position={overlayPosition}
+              />
             ) : null}
           </DragOverlay>
         </DndContext>

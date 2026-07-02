@@ -27,8 +27,19 @@
   --color-primary-900: oklch(0.37 0.181 286.55); /* #3f1c96 */
   --color-primary-950: oklch(0.27 0.138 284.08); /* #250f66 */
 
+  --color-stone-25: oklch(0.994 0.001 106.4);
+  --color-stone-75: oklch(0.979 0.001 106.4);
+  --color-stone-150: oklch(0.962 0.002 67.8);
+  --color-stone-175: oklch(0.9436 0.0017 67.8);
+  --color-stone-750: oklch(0.324 0.008 59.4);
+
+  --shadow-soft: 57px 61px 23px 0 rgba(41, 37, 36, 0),
+    37px 39px 21px 0 rgba(41, 37, 36, 0),
+    21px 22px 18px 0 rgba(41, 37, 36, 0.01),
+    9px 10px 13px 0 rgba(41, 37, 36, 0.02), 2px 2px 7px 0 rgba(41, 37, 36, 0.02);
+
   /* Dark color */
-  --color-dark: #222222;
+  --color-dark: oklch(20.105% 0.00397 285.961);
 
   /* Animation configuration */
   --animate-flicker: flicker 3s linear infinite;
@@ -255,4 +266,19 @@
   .animated-underline:focus-visible {
     background-size: 0 2px, 100% 2px;
   }
+}
+
+.bg-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--color-stone-300) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+}
+
+.bg-square {
+  background-image: linear-gradient(var(--color-stone-200) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-stone-200) 1px, transparent 1px);
+  background-size: 82px 82px;
 }

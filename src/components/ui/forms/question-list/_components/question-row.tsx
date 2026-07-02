@@ -14,6 +14,8 @@ export const QuestionRow = React.forwardRef<
     inputProps?: React.ComponentPropsWithoutRef<'input'>;
     inputRef?: React.Ref<HTMLInputElement>;
     value: string;
+    /** 1-based position shown at the start of the row. */
+    position: number;
     style?: React.CSSProperties;
   } & React.ComponentPropsWithoutRef<'div'>
 >(
@@ -25,6 +27,7 @@ export const QuestionRow = React.forwardRef<
       inputProps,
       inputRef,
       value,
+      position,
       style,
       ...rest
     },
@@ -57,7 +60,9 @@ export const QuestionRow = React.forwardRef<
             isOverlay ? liftedCard : restingCard
           )}
         >
-          <span className='h-5 w-5 flex-none rounded-full border-2 border-[#d6d6d0]' />
+          <span className='w-5 flex-none text-center text-[15px] font-medium leading-5 tabular-nums text-neutral-400'>
+            {position}
+          </span>
           <input
             ref={inputRef}
             value={value}

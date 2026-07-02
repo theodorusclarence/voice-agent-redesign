@@ -9,12 +9,14 @@ import type { Question } from './types';
 /** A single sortable row wired to dnd-kit. */
 export function SortableQuestion({
   question,
+  position,
   onTextChange,
   onKeyDown,
   onPaste,
   registerInput,
 }: {
   question: Question;
+  position: number;
   onTextChange: (id: string, text: string) => void;
   onKeyDown: (id: string, e: React.KeyboardEvent<HTMLInputElement>) => void;
   onPaste: (id: string, e: React.ClipboardEvent<HTMLInputElement>) => void;
@@ -50,6 +52,7 @@ export function SortableQuestion({
       ref={setNodeRef}
       style={style}
       value={question.text}
+      position={position}
       inputRef={(el) => registerInput(question.id, el)}
       inputProps={{
         onChange: (e) => onTextChange(question.id, e.target.value),
