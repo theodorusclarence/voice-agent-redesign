@@ -153,17 +153,17 @@
 
   /* Using :where to reset the selector specificity so it's easier to override */
   :where(a:not(.reset-default-ring)) {
-    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
   }
   :where(button:not(.reset-default-ring)) {
-    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
   }
 }
 
 @layer utilities {
   .default-ring {
     /* Normal Focus */
-    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
   }
 
   .animated-underline {
