@@ -32,7 +32,6 @@ type TypographyProps<T extends React.ElementType> = {
 
 /** @see https://www.benmvp.com/blog/forwarding-refs-polymorphic-react-component-typescript/ */
 export type TypographyComponent = (<T extends React.ElementType = 'p'>(
-  // eslint-disable-next-line no-unused-vars
   props: TypographyProps<T>
 ) => React.ReactNode | null) & {
   displayName?: string;
