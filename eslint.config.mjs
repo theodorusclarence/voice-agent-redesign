@@ -2,9 +2,12 @@ import js from '@eslint/js';
 import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
 import prettierConfig from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default [
   {
     ignores: ['.next/**', 'node_modules/**', 'public/**', 'next-env.d.ts'],
@@ -16,7 +19,7 @@ export default [
     files: ['**/__tests__/**/*.{ts,tsx}', '**/*.test.{ts,tsx}'],
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ...globals.vitest,
       },
     },
   },
@@ -90,4 +93,5 @@ export default [
       //#endregion  //*======== Import Sort ===========
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];

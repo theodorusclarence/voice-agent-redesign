@@ -4,6 +4,7 @@
 @theme {
   /* Font configuration */
   --font-primary: 'Inter', system-ui, sans-serif;
+  --font-geist: 'Geist', system-ui, sans-serif;
 
   /* Primary color palette - converted to modern oklch format */
   --color-primary-50: oklch(0.97 0.024 213.79);

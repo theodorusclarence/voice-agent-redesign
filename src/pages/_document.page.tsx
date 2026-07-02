@@ -10,6 +10,12 @@ export default function Document() {
         <link rel='shortcut icon' href='/favicon/favicon-16x16.png' />
         <link rel='apple-touch-icon' href='/favicon/apple-touch-icon.png' />
         <link rel='manifest' href='/favicon/site.webmanifest' />
+
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap'
+          rel='stylesheet'
+        />
       </Head>
       <body>
         <Main />
