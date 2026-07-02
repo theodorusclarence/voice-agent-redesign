@@ -80,7 +80,7 @@
     @apply font-primary text-sm md:text-base;
   }
   .j1 {
-    @apply text-4xl font-bold;
+    @apply font-primary text-4xl font-bold;
   }
   .j2 {
     @apply text-3xl font-bold;
