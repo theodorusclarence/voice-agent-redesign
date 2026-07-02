@@ -22,7 +22,7 @@ const FormButtonTrigger = React.forwardRef<
           'bg-white',
           'focus:outline-none',
           'border-neutral-200 hover:border-neutral-300 focus:border-primary-600',
-          'focus:ring-4 focus:ring-primary-500/[0.16]',
+          'focus:ring-4 focus:ring-primary-500/[0.16] focus:ring-offset-0',
         ],
         error && [
           'border-red-500 hover:border-red-500 focus:border-red-500',

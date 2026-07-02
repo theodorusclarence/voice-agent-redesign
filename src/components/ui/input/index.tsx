@@ -99,6 +99,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
                 'focus:outline-none',
                 'focus:ring-0',
+                'focus:ring-4 focus:ring-primary-500/[0.16]',
                 'border-neutral-200 hover:border-neutral-300 focus:border-primary-600',
               ],
             ],
@@ -110,6 +111,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               // NOTE: Error, disabled, & readOnly should be prioritized
               error && [
                 'border-red-300 hover:border-red-400 focus:border-red-500',
+                'focus:ring-red-500/[0.16]',
               ],
               disabled && [
                 'cursor-not-allowed text-neutral-400 placeholder:text-neutral-400',
