@@ -1,4 +1,4 @@
-export const ButtonVariant = ['primary', 'secondary', 'ghost'] as const;
+export const ButtonVariant = ['primary', 'secondary', 'ghost', 'dark'] as const;
 
 export function getButtonVariant(variant: (typeof ButtonVariant)[number]) {
   return [
@@ -22,6 +22,15 @@ export function getButtonVariant(variant: (typeof ButtonVariant)[number]) {
     variant === 'ghost' && [
       'border-transparent bg-transparent text-zinc-600 hover:bg-black/5 active:bg-black/[.09]',
       'disabled:border-transparent disabled:bg-transparent disabled:text-neutral-400 disabled:hover:bg-transparent disabled:active:bg-transparent',
+    ],
+
+    // Secondary for dark surfaces (the call preview panel) — the light
+    // variants disappear there, and the global focus ring's offset reads
+    // wrong against a dark background, so it brings its own soft ring.
+    variant === 'dark' && [
+      'border-white/10 bg-white/6 text-white hover:border-white/25 active:bg-white/10',
+      'focus-visible:border-primary-500 focus-visible:ring-4 focus-visible:ring-primary-500/25 focus-visible:ring-offset-0',
+      'disabled:border-transparent disabled:bg-white/5 disabled:text-neutral-500 disabled:hover:border-transparent disabled:active:bg-white/5',
     ],
   ];
 }

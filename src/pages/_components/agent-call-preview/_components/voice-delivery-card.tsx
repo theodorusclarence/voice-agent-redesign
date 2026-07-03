@@ -9,6 +9,7 @@ import { clsx, cn } from 'cnfast';
 import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
 
+import Button from '@/components/ui/buttons/button';
 import { getFrostBorder } from '@/components/ui/frost-border/class';
 import Typography from '@/components/ui/typography';
 
@@ -101,15 +102,13 @@ export function VoiceDeliveryCard({
           </div>
           <div className='c1 text-neutral-400'>{statusSub}</div>
         </div>
-        <button
-          type='button'
+        <Button
+          variant='primary'
           onClick={onPlayToggle}
           aria-label={playing ? 'Pause preview' : 'Play preview'}
           className={cn([
-            'flex size-11 flex-none items-center justify-center rounded-full',
-            'bg-primary-500 text-white transition-colors hover:bg-primary-500/90',
-            'ring-offset-0 focus:outline-none',
-            'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2]',
+            'size-11 flex-none rounded-full p-0',
+            'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2] focus-visible:ring-offset-0',
           ])}
         >
           <HugeiconsIcon
@@ -118,7 +117,7 @@ export function VoiceDeliveryCard({
             className='drop-shadow-sm'
             size={20}
           />
-        </button>
+        </Button>
       </div>
 
       <motion.button
@@ -173,8 +172,6 @@ export function VoiceDeliveryCard({
                 onPick={(value) => onSettingsChange({ [rows[0].key]: value })}
               />
 
-              {/* Styled by hand to sit flush with the SettingRow dropdowns —
-                  the shared Button variants are light-theme only. */}
               <div className='flex flex-col gap-1.5'>
                 <Typography
                   variant='c1'
@@ -182,15 +179,9 @@ export function VoiceDeliveryCard({
                 >
                   Custom voice
                 </Typography>
-                <button
-                  type='button'
-                  className={cn([
-                    'flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-sm',
-                    'border-white/10 bg-white/6 text-white transition',
-                    'hover:border-white/25',
-                    'ring-offset-0 focus:outline-none',
-                    'focus-visible:border-primary-500 focus-visible:ring-4 focus-visible:ring-primary-500/25',
-                  ])}
+                <Button
+                  variant='dark'
+                  className='w-full justify-start px-3 gap-1.5 pl-2.5 py-[11px]'
                 >
                   <HugeiconsIcon
                     icon={Mic01Icon}
@@ -198,9 +189,9 @@ export function VoiceDeliveryCard({
                     className='flex-none text-primary-400'
                   />
                   <span className='min-w-0 flex-1 truncate text-left'>
-                    Record your own
+                    Clone your own
                   </span>
-                </button>
+                </Button>
               </div>
               {rows.slice(1, 5).map((row) => (
                 <SettingRow

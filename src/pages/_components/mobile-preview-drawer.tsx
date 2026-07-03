@@ -4,6 +4,8 @@ import { clsx, cn } from 'cnfast';
 import * as React from 'react';
 import { Drawer } from 'vaul';
 
+import Button from '@/components/ui/buttons/button';
+
 import AgentCallPreview from '@/pages/_components/agent-call-preview';
 import { PixelLoader } from '@/pages/_components/agent-call-preview/_components/pixel-loader';
 import type { AgentPreview } from '@/pages/_components/agent-call-preview/_utils/use-agent-preview';
@@ -64,8 +66,8 @@ export default function MobilePreviewDrawer({
           </div>
           <div className='c1 truncate text-neutral-400'>{statusSub}</div>
         </div>
-        <button
-          type='button'
+        <Button
+          variant='primary'
           onClick={() => {
             // Starting a call from the closed bar also surfaces the drawer,
             // so the first tap lands you on the live transcript.
@@ -74,10 +76,8 @@ export default function MobilePreviewDrawer({
           }}
           aria-label={playing ? 'Pause preview' : 'Play preview'}
           className={cn([
-            'relative flex size-10 flex-none items-center justify-center rounded-full',
-            'bg-primary-500 text-white transition-colors hover:bg-primary-500/90',
-            'ring-offset-0 focus:outline-none',
-            'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2]',
+            'relative size-10 flex-none rounded-full p-0',
+            'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2] focus-visible:ring-offset-0',
           ])}
         >
           <HugeiconsIcon
@@ -86,7 +86,7 @@ export default function MobilePreviewDrawer({
             className='drop-shadow-sm'
             size={18}
           />
-        </button>
+        </Button>
       </div>
 
       <Drawer.Portal>

@@ -42,18 +42,40 @@ export const Ghost: Story = {
   },
 };
 
+// The dark variant lives on the call preview panel, so it gets a matching
+// backdrop — on the default light canvas it's nearly invisible.
+export const Dark: Story = {
+  args: {
+    variant: 'dark',
+  },
+  decorators: [
+    (StoryComponent) => (
+      <div className='bg-dark w-fit rounded-2xl p-6'>
+        <StoryComponent />
+      </div>
+    ),
+  ],
+};
+
 export const AllVariants: Story = {
   render: () => (
-    <div className='flex flex-wrap gap-3 p-4'>
-      <ButtonLink href='/' variant='primary'>
-        Primary
-      </ButtonLink>
-      <ButtonLink href='/' variant='secondary'>
-        Secondary
-      </ButtonLink>
-      <ButtonLink href='/' variant='ghost'>
-        Ghost
-      </ButtonLink>
+    <div className='flex flex-col gap-4 p-4'>
+      <div className='flex flex-wrap gap-3'>
+        <ButtonLink href='/' variant='primary'>
+          Primary
+        </ButtonLink>
+        <ButtonLink href='/' variant='secondary'>
+          Secondary
+        </ButtonLink>
+        <ButtonLink href='/' variant='ghost'>
+          Ghost
+        </ButtonLink>
+      </div>
+      <div className='bg-dark flex w-fit flex-wrap gap-3 rounded-2xl p-4'>
+        <ButtonLink href='/' variant='dark'>
+          Dark
+        </ButtonLink>
+      </div>
     </div>
   ),
 };
