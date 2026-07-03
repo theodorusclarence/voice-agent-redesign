@@ -68,6 +68,12 @@ export default function CreateAgentForm({
     { fadeTop: 5, fadeBottom: 2 }
   );
 
+  // The heading fields hide their inline errors (stacked red lines wreck the
+  // header look) and surface the first one here, below the description.
+  const { errors } = form.formState;
+  const headerErrorMessage =
+    errors.name?.message ?? errors.description?.message;
+
   return (
     <Form
       form={form}
@@ -109,6 +115,7 @@ export default function CreateAgentForm({
               }
             }}
             spellCheck={false}
+            withErrorMessage={false}
             {...form.register('name', { required: 'Name is required' })}
           />
           <FormTextLikeTextArea
@@ -119,10 +126,14 @@ export default function CreateAgentForm({
             }}
             placeholder='Add a short description of what this agent does…'
             spellCheck={false}
-            {...form.register('description', {
-              required: 'Description is required',
-            })}
+            withErrorMessage={false}
+            {...form.register('description')}
           />
+          {headerErrorMessage && (
+            <FormErrorMessage className='mt-2'>
+              {headerErrorMessage}
+            </FormErrorMessage>
+          )}
         </div>
       </header>
 
