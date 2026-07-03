@@ -244,10 +244,12 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           !e.altKey &&
           e.key.toLowerCase() === 'z'
         ) {
-          // Replace native per-textarea undo: the list history covers text
-          // edits too (coalesced), and can restore added/removed rows, which
-          // the browser's undo can't. Falls through to native when empty.
-          if (e.shiftKey ? redo() : undo()) e.preventDefault();
+          // Replace native per-textarea undo entirely: every text mutation
+          // flows through handleTextChange into the list history, so native
+          // undo has nothing ours doesn't — and it can't restore rows.
+          e.preventDefault();
+          if (e.shiftKey) redo();
+          else undo();
         } else if (e.key === 'Enter') {
           e.preventDefault();
           applyAction(insertQuestionAfter(questions, id));
