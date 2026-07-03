@@ -3,7 +3,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { clsx, cn } from 'cnfast';
 import { nanoid } from 'nanoid';
 import * as React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useFormContext } from 'react-hook-form';
 
 import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mask';
 
@@ -11,7 +11,6 @@ import FirefliesLogo from '@/components/logo/fireflies-logo';
 import Button from '@/components/ui/buttons/button';
 import TextButton from '@/components/ui/buttons/text-button';
 import FormErrorMessage from '@/components/ui/forms/error-message';
-import Form from '@/components/ui/forms/form';
 import FormLabel from '@/components/ui/forms/label';
 import QuestionList, {
   type Question,
@@ -49,21 +48,27 @@ const defaultValues = (): CreateAgentFormValues => ({
   instructions: '',
 });
 
+/**
+ * Owns the builder form instance. Lives on the page so the sibling call
+ * preview can `useWatch` the same values through `<Form>`'s provider.
+ */
+export function useCreateAgentForm() {
+  return useForm<CreateAgentFormValues>({
+    mode: 'onTouched',
+    defaultValues: defaultValues(),
+  });
+}
+
 interface CreateAgentFormProps {
   className?: string;
-  onCreate?: (values: CreateAgentFormValues) => void;
   onCancel?: () => void;
 }
 
 export default function CreateAgentForm({
   className,
-  onCreate,
   onCancel,
 }: CreateAgentFormProps) {
-  const form = useForm<CreateAgentFormValues>({
-    mode: 'onTouched',
-    defaultValues: defaultValues(),
-  });
+  const form = useFormContext<CreateAgentFormValues>();
 
   const { ref: scrollRef, maskImage } = useConditionalVerticalMask<HTMLElement>(
     { fadeTop: 5, fadeBottom: 2 }
@@ -76,11 +81,7 @@ export default function CreateAgentForm({
     errors.name?.message ?? errors.description?.message;
 
   return (
-    <Form
-      form={form}
-      onSubmit={(values) => onCreate?.(values)}
-      className={cn(['flex h-full min-h-0 flex-col', className])}
-    >
+    <div className={cn(['flex h-full min-h-0 flex-col', className])}>
       <header className='flex items-start gap-4 p-10 pb-0'>
         <button
           type='button'
@@ -224,6 +225,6 @@ export default function CreateAgentForm({
           Create agent
         </Button>
       </footer>
-    </Form>
+    </div>
   );
 }
