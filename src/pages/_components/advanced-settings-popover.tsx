@@ -124,8 +124,11 @@ const AdvancedSettingsPopover = React.forwardRef<
               description='If email is selected, users will need to verify with an OTP.'
             />
             <div className='mt-3 flex items-center gap-6'>
+              {/* Name is always collected — the checkbox is shown checked
+                  and locked so the requirement reads at a glance. */}
               <FormCheckbox
                 label='Name'
+                disabled
                 {...form.register('participantName')}
               />
               <FormCheckbox
