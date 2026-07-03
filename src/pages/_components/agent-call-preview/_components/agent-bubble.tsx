@@ -46,7 +46,7 @@ export function AgentBubble({
       initial={animated ? 'hidden' : false}
       animate='visible'
       variants={bubbleVariants}
-      className='flex max-w-[88%] flex-col gap-1.5 self-start'
+      className='flex max-w-[88%] flex-col gap-1.5 self-start shrink-0'
     >
       <div className='flex items-center gap-2 pl-1'>
         <span className='c2 font-normal tracking-wide text-neutral-400'>
