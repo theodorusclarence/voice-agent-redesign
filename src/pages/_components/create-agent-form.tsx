@@ -1,4 +1,4 @@
-import { Edit04Icon } from '@hugeicons/core-free-icons';
+import { Edit04Icon, Settings02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { clsx, cn } from 'cnfast';
 import { nanoid } from 'nanoid';
@@ -17,7 +17,8 @@ import QuestionList, {
 } from '@/components/ui/forms/question-list';
 import FormTextArea from '@/components/ui/forms/text-area';
 import FormTextLikeTextArea from '@/components/ui/forms/text-like-text-area';
-import Typography from '@/components/ui/typography';
+
+import AdvancedSettingsPopover from '@/pages/_components/advanced-settings-popover';
 
 export interface CreateAgentFormValues {
   name: string;
@@ -25,6 +26,11 @@ export interface CreateAgentFormValues {
   questions: Question[];
   knowledge?: string;
   instructions?: string;
+  visibility: boolean;
+  meetingPrivacy: string;
+  sendRecapEmail: string;
+  participantName: boolean;
+  participantEmail: boolean;
 }
 
 const defaultValues = (): CreateAgentFormValues => ({
@@ -46,6 +52,11 @@ const defaultValues = (): CreateAgentFormValues => ({
   ],
   knowledge: '',
   instructions: '',
+  visibility: false,
+  meetingPrivacy: 'Teammates & Anyone with Link',
+  sendRecapEmail: 'Owner and participants',
+  participantName: true,
+  participantEmail: false,
 });
 
 /**
@@ -216,12 +227,24 @@ export default function CreateAgentForm({
           'px-5 py-4 sm:px-10 sm:py-6',
         ])}
       >
-        <Typography
-          variant='c1'
-          className='mr-auto hidden text-neutral-400 sm:block'
-        >
-          1 AI credit per minute
-        </Typography>
+        <div className='mr-auto'>
+          <AdvancedSettingsPopover
+            className={clsx(['text-left w-fit c1', 'max-sm:mr-4'])}
+          >
+            <Button
+              variant='ghost'
+              className={clsx([
+                'inline-flex items-center gap-1.5',
+                'px-2 py-1.5 text-xs',
+                'max-sm:p-2',
+                className,
+              ])}
+            >
+              <HugeiconsIcon icon={Settings02Icon} size={14} />
+              <span className='hidden sm:block'>Advanced Settings</span>
+            </Button>
+          </AdvancedSettingsPopover>
+        </div>
 
         <Button
           variant='secondary'
