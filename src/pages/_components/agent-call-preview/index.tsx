@@ -1,62 +1,40 @@
 import { clsx, cn } from 'cnfast';
 import * as React from 'react';
-import { useWatch } from 'react-hook-form';
 
 import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mask';
 
-import { type CreateAgentFormValues } from '@/pages/_components/create-agent-form';
-
 import { AgentBubble } from './_components/agent-bubble';
 import { AnswerBubble } from './_components/answer-bubble';
-import {
-  DEFAULT_SETTINGS,
-  durationToSeconds,
-  LANGUAGE_CODES,
-  type VoiceDeliverySettings,
-} from './_components/constants';
+import { LANGUAGE_CODES } from './_components/constants';
 import { TypingBubble } from './_components/typing-bubble';
 import { VoiceDeliveryCard } from './_components/voice-delivery-card';
-import { useCallSimulation } from './_utils/use-call-simulation';
+import type { AgentPreview } from './_utils/use-agent-preview';
 
 /**
- * Live call preview (right panel of the builder). Reads the agent name and
- * questions straight off the builder form context. Idle, it shows the first
- * few questions as a mock transcript; play walks through every question with
- * speaking/listening states. Voice & delivery settings live in the bottom
- * card and stay visible as a summary while collapsed.
+ * Live call preview (right panel of the builder, or the mobile drawer body).
+ * All state comes in through `preview` (see `useAgentPreview`) so the same
+ * simulation can render here and on the mobile peek bar at once. Idle, it
+ * shows the first few questions as a mock transcript; play walks through
+ * every question with speaking/listening states. Voice & delivery settings
+ * live in the bottom card and stay visible as a summary while collapsed.
  */
 export default function AgentCallPreview({
+  preview,
   className,
 }: {
+  preview: AgentPreview;
   className?: string;
 }) {
-  const name = useWatch<CreateAgentFormValues, 'name'>({ name: 'name' });
-  const questions = useWatch<CreateAgentFormValues, 'questions'>({
-    name: 'questions',
-  });
-
-  const [settings, setSettings] = React.useState(DEFAULT_SETTINGS);
-  const onSettingsChange = (patch: Partial<VoiceDeliverySettings>) =>
-    setSettings((prev) => ({ ...prev, ...patch }));
-
-  const questionTexts = React.useMemo(
-    () => (questions ?? []).map((q) => q.text.trim()).filter(Boolean),
-    [questions]
-  );
-
   const {
+    displayName,
+    questionTexts,
+    settings,
+    onSettingsChange,
     playing,
-    step: rawStep,
+    step,
     phase,
     toggle,
-  } = useCallSimulation({
-    questionCount: questionTexts.length,
-    durationSecs: durationToSeconds(settings.duration),
-  });
-  // Deleting questions mid-call can leave the step past the end.
-  const step = Math.min(rawStep, Math.max(0, questionTexts.length - 1));
-
-  const displayName = name?.trim() || 'Your Agent';
+  } = preview;
 
   // Idle: a static three-turn sample. Playing: turns appear as the call runs.
   const shownCount = playing ? step + 1 : Math.max(questionTexts.length, 1);

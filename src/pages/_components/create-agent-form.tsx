@@ -82,15 +82,21 @@ export default function CreateAgentForm({
 
   return (
     <div className={cn(['flex h-full min-h-0 flex-col', className])}>
-      <header className='flex items-start gap-4 p-10 pb-0'>
+      <header
+        className={clsx([
+          'flex items-start gap-4 p-5 pb-0 sm:p-10 sm:pb-0',
+          'max-sm:flex-col max-sm:gap-3',
+        ])}
+      >
         <button
           type='button'
           className={cn([
-            'group relative flex h-14 w-14 flex-none items-center justify-center rounded-2xl',
+            'group relative flex size-14 flex-none items-center justify-center rounded-2xl',
             'bg-stone-150/80 transition hover:bg-stone-150',
+            'max-sm:size-10 max-sm:rounded-lg',
           ])}
         >
-          <FirefliesLogo className='size-8 text-neutral-600' />
+          <FirefliesLogo className='size-8 max-sm:size-6 text-neutral-600' />
           <span
             className={cn([
               'absolute right-0 translate-x-1/3 bottom-0 flex size-5 items-center justify-center rounded-md',
@@ -144,10 +150,11 @@ export default function CreateAgentForm({
         // Fade the content near the scroll edges that still overflow.
         style={{ maskImage }}
         className={clsx([
-          'mt-6 pb-8 flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto py-1',
+          'mt-6 flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto py-1',
+          'pb-24 lg:pb-8', // clear the floating preview bar on mobile
           'overscroll-none',
-          // 3*4px -> offset px-3, 10*4px -> px-10
-          '-mx-3 px-[calc(3*4px_+_10*4px)]', // keep focus rings from clipping at the scroll container's edges
+          // 3*4px -> offset px-3, 5*4px -> px-5, 10*4px -> px-10
+          'px-[calc(3*4px_+_5*4px)] sm:px-[calc(3*4px_+_10*4px)]', // keep focus rings from clipping at the scroll container's edges
           'hide-scrollbar',
         ])}
       >
@@ -205,11 +212,15 @@ export default function CreateAgentForm({
 
       <footer
         className={clsx([
-          'flex items-center gap-2.5 border-t border-black/[0.06] px-10 py-6',
+          'flex items-center gap-2.5 border-t border-black/[0.06]',
+          'px-5 py-4 sm:px-10 sm:py-6',
         ])}
       >
-        <Typography variant='c1' className='mr-auto text-neutral-400'>
-          Voice agent costs 1 AI credit per minute
+        <Typography
+          variant='c1'
+          className='mr-auto hidden text-neutral-400 sm:block'
+        >
+          1 AI credit per minute
         </Typography>
 
         <Button
@@ -221,7 +232,7 @@ export default function CreateAgentForm({
         >
           Cancel
         </Button>
-        <Button type='submit' variant='primary'>
+        <Button type='submit' variant='primary' className='grow sm:grow-0'>
           Create agent
         </Button>
       </footer>
