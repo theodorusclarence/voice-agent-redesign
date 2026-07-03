@@ -8,7 +8,7 @@ import Button from '@/components/ui/buttons/button';
 
 import AgentCallPreview from '@/pages/_components/agent-call-preview';
 import { PixelLoader } from '@/pages/_components/agent-call-preview/_components/pixel-loader';
-import type { AgentPreview } from '@/pages/_components/agent-call-preview/_utils/use-agent-preview';
+import type { AgentPreview } from '@/pages/_components/agent-call-preview/_hooks/use-agent-preview';
 
 /**
  * Mobile take on the call preview: a docked peek bar (glyph · status · play)

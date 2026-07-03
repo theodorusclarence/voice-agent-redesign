@@ -2,7 +2,7 @@ import Seo from '@/components/seo';
 import Form from '@/components/ui/forms/form';
 
 import AgentCallPreview from '@/pages/_components/agent-call-preview';
-import { useAgentPreview } from '@/pages/_components/agent-call-preview/_utils/use-agent-preview';
+import { useAgentPreview } from '@/pages/_components/agent-call-preview/_hooks/use-agent-preview';
 import CreateAgentForm, {
   useCreateAgentForm,
 } from '@/pages/_components/create-agent-form';
@@ -29,13 +29,6 @@ export default function HomePage() {
   );
 }
 
-/**
- * Split off the page so `useAgentPreview` can read the form context that
- * `<Form>` provides. Desktop shows the form and the call preview side by
- * side; on mobile the form owns the screen and the preview docks into a
- * bottom drawer — both render off the same preview state, so play state
- * survives crossing the breakpoint.
- */
 function BuilderPanels() {
   const preview = useAgentPreview();
 

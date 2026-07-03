@@ -3,12 +3,12 @@ import { useWatch } from 'react-hook-form';
 
 import { type CreateAgentFormValues } from '@/pages/_components/create-agent-form';
 
-import { type CallPhase, useCallSimulation } from '../use-call-simulation';
+import { type CallPhase, useCallSimulation } from './use-call-simulation';
 import {
   DEFAULT_SETTINGS,
   durationToSeconds,
   type VoiceDeliverySettings,
-} from '../../_components/constants';
+} from '../_components/constants';
 
 export interface AgentPreview {
   displayName: string;

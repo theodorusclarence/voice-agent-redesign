@@ -23,7 +23,7 @@ import {
 } from './constants';
 import { PixelLoader } from './pixel-loader';
 import { SettingRow } from './setting-row';
-import type { CallPhase } from '../_utils/use-call-simulation';
+import type { CallPhase } from '../_hooks/use-call-simulation';
 
 /**
  * Bottom card of the call preview: status row (pixel glyph + play button)

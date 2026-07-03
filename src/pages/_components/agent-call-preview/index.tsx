@@ -6,7 +6,7 @@ import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mas
 import { AgentBubble } from './_components/agent-bubble';
 import { AnswerBubble } from './_components/answer-bubble';
 import { VoiceDeliveryCard } from './_components/voice-delivery-card';
-import type { AgentPreview } from './_utils/use-agent-preview';
+import type { AgentPreview } from './_hooks/use-agent-preview';
 
 /**
  * Live call preview (right panel of the builder, or the mobile drawer body).
