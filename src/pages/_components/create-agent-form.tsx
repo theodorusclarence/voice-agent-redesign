@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mask';
+
 import FirefliesLogo from '@/components/logo/fireflies-logo';
 import Button from '@/components/ui/buttons/button';
 import FormErrorMessage from '@/components/ui/forms/error-message';
@@ -62,8 +64,12 @@ export default function CreateAgentForm({
     defaultValues: defaultValues(),
   });
 
+  const { ref: scrollRef, maskImage } = useConditionalVerticalMask<HTMLElement>(
+    { fadeTop: 5, fadeBottom: 2 }
+  );
+
   return (
-    <Form<CreateAgentFormValues>
+    <Form
       form={form}
       onSubmit={(values) => onCreate?.(values)}
       className={cn(['flex h-full min-h-0 flex-col', className])}
@@ -121,8 +127,12 @@ export default function CreateAgentForm({
       </header>
 
       <main
+        ref={scrollRef}
+        // Fade the content near the scroll edges that still overflow.
+        style={{ maskImage }}
         className={clsx([
-          'mt-6 flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto py-1',
+          'mt-6 pb-8 flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto py-1',
+          'overscroll-none',
           // 3*4px -> offset px-3, 10*4px -> px-10
           '-mx-3 px-[calc(3*4px_+_10*4px)]', // keep focus rings from clipping at the scroll container's edges
           'hide-scrollbar',
@@ -172,7 +182,6 @@ export default function CreateAgentForm({
       <footer
         className={clsx([
           'flex items-center gap-2.5 border-t border-black/[0.06] px-10 py-6',
-          // '-mx-10',
         ])}
       >
         <Typography variant='c1' className='mr-auto text-neutral-400'>

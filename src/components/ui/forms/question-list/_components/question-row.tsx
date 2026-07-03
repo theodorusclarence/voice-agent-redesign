@@ -97,6 +97,7 @@ export const QuestionRow = React.forwardRef<
             value={value}
             minRows={1}
             placeholder='Type a question…'
+            spellCheck={false}
             className={cn(
               'min-w-0 flex-1 resize-none border-none bg-transparent p-0 b3 text-[#141414] outline-none',
               'placeholder:text-neutral-400',
