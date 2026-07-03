@@ -131,6 +131,8 @@ export default function CreateAgentForm({
                 'text-2xl font-medium tracking-tight hide-scrollbar leading-tight placeholder:text-neutral-300',
             }}
             placeholder='Untitled agent'
+            maxRows={3}
+            maxLength={120}
             // A heading wraps, it doesn't take literal newlines.
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -149,6 +151,8 @@ export default function CreateAgentForm({
               textArea: 'text-sm hide-scrollbar leading-snug text-neutral-500',
             }}
             placeholder='Add a short description of what this agent does…'
+            maxRows={3}
+            maxLength={300}
             spellCheck={false}
             withErrorMessage={false}
             {...form.register('description')}
