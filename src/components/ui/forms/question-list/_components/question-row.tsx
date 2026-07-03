@@ -1,5 +1,7 @@
+import NumberFlow from '@number-flow/react';
 import { cn } from 'cnfast';
 import * as React from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { ROW_HEIGHT } from './constants';
 import { DragHandle } from './drag-handle';
@@ -11,8 +13,9 @@ export const QuestionRow = React.forwardRef<
     isDragging?: boolean;
     isOverlay?: boolean;
     handleProps?: React.ComponentPropsWithRef<'button'>;
-    inputProps?: React.ComponentPropsWithoutRef<'input'>;
-    inputRef?: React.Ref<HTMLInputElement>;
+    // `style` omitted — TextareaAutosize owns it (numeric height while sizing).
+    inputProps?: Omit<React.ComponentPropsWithoutRef<'textarea'>, 'style'>;
+    inputRef?: React.Ref<HTMLTextAreaElement>;
     value: string;
     /** 1-based position shown at the start of the row. */
     position: number;
@@ -49,32 +52,66 @@ export const QuestionRow = React.forwardRef<
     return (
       <div
         ref={ref}
-        style={{ height: ROW_HEIGHT, ...style }}
+        style={style}
         className={cn('touch-none', isDragging && !isOverlay && 'opacity-0')}
         {...rest}
       >
         <div
+          // min-height keeps the single-line rhythm; the autosizing textarea
+          // grows the card for wrapped questions. `items-start` + `py-4`
+          // (16 + 20px line + 16 = 52) pins the number and handle to the first
+          // text line, so multi-line rows stay balanced instead of the number
+          // floating between lines.
+          style={{ minHeight: ROW_HEIGHT }}
           className={cn(
             'question-card',
-            'flex h-full origin-center items-center gap-[13px] rounded-[14px] border bg-white pl-4 pr-2',
+            'flex origin-center items-start rounded-2xl border bg-white',
+            'gap-1.5',
+            'py-2.5 pl-2.25 pr-1.5',
             isOverlay ? liftedCard : restingCard
           )}
         >
-          <span className='w-5 flex-none text-center text-[15px] font-medium leading-5 tabular-nums text-neutral-400'>
-            {position}
+          <span className='w-5 flex-none text-center b3 font-medium leading-5 tabular-nums text-neutral-400'>
+            {isOverlay ? (
+              // The overlay's number tracks the projected drop position while
+              // dragging; NumberFlow rolls between values instead of snapping.
+              // Background rows keep a plain number — they swap identity, not
+              // value, so animating them would roll on every reorder shift.
+              <NumberFlow
+                value={position}
+                transformTiming={{
+                  duration: 300,
+                  easing: 'cubic-bezier(.2,.8,.2,1)',
+                }}
+                spinTiming={{
+                  duration: 300,
+                  easing: 'cubic-bezier(.2,.8,.2,1)',
+                }}
+              />
+            ) : (
+              position
+            )}
           </span>
-          <input
+          <TextareaAutosize
             ref={inputRef}
             value={value}
+            minRows={1}
             placeholder='Type a question…'
             className={cn(
-              'min-w-0 flex-1 border-none bg-transparent p-0 text-[15px] font-medium text-[#141414] outline-none',
+              'min-w-0 flex-1 resize-none border-none bg-transparent p-0 b3 text-[#141414] outline-none',
               'placeholder:text-neutral-400',
-              'focus-visible:ring-0'
+              'focus-visible:ring-0',
+              'hide-scrollbar'
             )}
             {...inputProps}
           />
-          <DragHandle isDragging={isDragging || isOverlay} {...handleProps} />
+          {/* -my-1 collapses the 28px button to a 20px line box so it centers
+              on the first text line without inflating the row. */}
+          <DragHandle
+            className='-mt-[2px] -mb-[2px]'
+            isDragging={isDragging || isOverlay}
+            {...handleProps}
+          />
         </div>
       </div>
     );

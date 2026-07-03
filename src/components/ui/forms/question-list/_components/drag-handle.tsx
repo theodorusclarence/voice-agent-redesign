@@ -18,12 +18,12 @@ export const DragHandle = React.forwardRef<
         'grid place-items-center rounded-md p-1 px-0.5 text-neutral-400',
         'touch-none outline-none transition',
         'hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-primary-600/60',
-        isDragging ? 'cursor-grabbing' : 'cursor-grab',
+        isDragging ? 'cursor-grabbing bg-neutral-100' : 'cursor-grab',
         className
       )}
       {...rest}
     >
-      <HugeiconsIcon icon={DragDropVerticalIcon} size={20} />
+      <HugeiconsIcon icon={DragDropVerticalIcon} size={17} />
     </button>
   );
 });

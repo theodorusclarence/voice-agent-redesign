@@ -41,10 +41,6 @@ const defaultValues = (): CreateAgentFormValues => ({
       id: nanoid(),
       text: 'Tell me about a recent project you worked on and your role in it.',
     },
-    {
-      id: nanoid(),
-      text: 'What challenges do you typically face in your work?',
-    },
   ],
   knowledge: '',
   instructions: '',
@@ -160,14 +156,14 @@ export default function CreateAgentForm({
         <FormTextArea
           label='Knowledge'
           showOptionalLabel
-          minRows={4}
+          minRows={3}
           placeholder='Background info the agent can lean on — product details, FAQs, docs…'
           {...form.register('knowledge')}
         />
         <FormTextArea
           label='Instructions'
           showOptionalLabel
-          minRows={4}
+          minRows={3}
           placeholder='How should the agent behave? Tone, rules, things to avoid…'
           {...form.register('instructions')}
         />
