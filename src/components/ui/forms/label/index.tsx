@@ -29,7 +29,7 @@ const FormLabel = ({
       {...rest}
     >
       {children}
-      {optional && <span className='text-neutral-400'> (optional)</span>}
+      {optional && <span className='text-neutral-400 ml-px'> (optional)</span>}
     </Typography>
   );
 };

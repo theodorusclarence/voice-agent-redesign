@@ -9,6 +9,7 @@ import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mas
 
 import FirefliesLogo from '@/components/logo/fireflies-logo';
 import Button from '@/components/ui/buttons/button';
+import TextButton from '@/components/ui/buttons/text-button';
 import FormErrorMessage from '@/components/ui/forms/error-message';
 import Form from '@/components/ui/forms/form';
 import FormLabel from '@/components/ui/forms/label';
@@ -174,13 +175,24 @@ export default function CreateAgentForm({
           )}
         />
 
-        <FormTextArea
-          label='Knowledge'
-          showOptionalLabel
-          minRows={3}
-          placeholder='Background info the agent can lean on — product details, FAQs, docs…'
-          {...form.register('knowledge')}
-        />
+        <div>
+          <FormTextArea
+            label='Knowledge'
+            showOptionalLabel
+            minRows={3}
+            placeholder='Background info the agent can lean on — product details, FAQs, docs…'
+            {...form.register('knowledge')}
+          />
+          <TextButton
+            className={clsx([
+              'mt-2 ml-auto block c1',
+              '-mb-3', // give the gap visual balance between form field
+            ])}
+          >
+            Add Knowledge Base
+          </TextButton>
+        </div>
+
         <FormTextArea
           label='Instructions'
           showOptionalLabel
