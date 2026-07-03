@@ -1,0 +1,126 @@
+import { cn } from 'cnfast';
+import * as React from 'react';
+import { useWatch } from 'react-hook-form';
+
+import { type CreateAgentFormValues } from '@/pages/_components/create-agent-form';
+
+import { AgentBubble } from './_components/agent-bubble';
+import { AnswerBubble } from './_components/answer-bubble';
+import {
+  DEFAULT_SETTINGS,
+  durationToSeconds,
+  LANGUAGE_CODES,
+  type VoiceDeliverySettings,
+} from './_components/constants';
+import { TypingBubble } from './_components/typing-bubble';
+import { VoiceDeliveryCard } from './_components/voice-delivery-card';
+import { useCallSimulation } from './_utils/use-call-simulation';
+
+/**
+ * Live call preview (right panel of the builder). Reads the agent name and
+ * questions straight off the builder form context. Idle, it shows the first
+ * few questions as a mock transcript; play walks through every question with
+ * speaking/listening states. Voice & delivery settings live in the bottom
+ * card and stay visible as a summary while collapsed.
+ */
+export default function AgentCallPreview({
+  className,
+}: {
+  className?: string;
+}) {
+  const name = useWatch<CreateAgentFormValues, 'name'>({ name: 'name' });
+  const questions = useWatch<CreateAgentFormValues, 'questions'>({
+    name: 'questions',
+  });
+
+  const [settings, setSettings] = React.useState(DEFAULT_SETTINGS);
+  const onSettingsChange = (patch: Partial<VoiceDeliverySettings>) =>
+    setSettings((prev) => ({ ...prev, ...patch }));
+
+  const questionTexts = React.useMemo(
+    () => (questions ?? []).map((q) => q.text.trim()).filter(Boolean),
+    [questions]
+  );
+
+  const {
+    playing,
+    step: rawStep,
+    phase,
+    toggle,
+  } = useCallSimulation({
+    questionCount: questionTexts.length,
+    durationSecs: durationToSeconds(settings.duration),
+  });
+  // Deleting questions mid-call can leave the step past the end.
+  const step = Math.min(rawStep, Math.max(0, questionTexts.length - 1));
+
+  const displayName = name?.trim() || 'Your Agent';
+
+  // Idle: a static three-turn sample. Playing: turns appear as the call runs.
+  const shownCount = playing ? step + 1 : Math.max(questionTexts.length, 1);
+  const turns: React.ReactNode[] = [];
+  for (let i = 0; i < shownCount; i++) {
+    const text = questionTexts[i] ?? 'Add a question to preview it here';
+    const active = playing && i === step && phase === 'ask';
+    turns.push(
+      <AgentBubble
+        key={`agent-${i}`}
+        name={displayName}
+        text={text}
+        active={active}
+      />
+    );
+    if (!playing || i < step) turns.push(<AnswerBubble key={`answer-${i}`} />);
+    else if (i === step && phase === 'answer')
+      turns.push(<TypingBubble key={`answer-${i}`} />);
+  }
+
+  // Keep the newest turn in view as the call plays.
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!playing) return;
+    const el = scrollRef.current;
+    el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+  }, [playing, shownCount, phase]);
+
+  return (
+    <div className={cn(['flex h-full min-h-0 flex-col', className])}>
+      {/* Centered, phone-call-style header — identity (icon + name) already
+          lives on the left panel, so this reads as the live call instead. */}
+      <header className='flex flex-none flex-col items-center gap-1 pb-1 pt-0.5 text-center'>
+        <div className='max-w-full truncate text-[17px] font-bold text-white'>
+          {displayName}
+        </div>
+        <div className='flex items-center gap-2'>
+          <div
+            className={cn([
+              'size-[7px] rounded-full transition-all duration-300',
+              playing
+                ? 'bg-primary-500 shadow-[0_0_7px_var(--color-primary-500)]'
+                : 'bg-white/30',
+            ])}
+          />
+          <span className='text-xs text-neutral-400'>
+            {playing ? 'On the call' : 'Call preview'} · {settings.voice} ·{' '}
+            {LANGUAGE_CODES[settings.language] ?? 'EN'}
+          </span>
+        </div>
+      </header>
+
+      <div
+        ref={scrollRef}
+        className='hide-scrollbar -mx-1 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1 py-5'
+      >
+        {turns}
+      </div>
+
+      <VoiceDeliveryCard
+        playing={playing}
+        phase={phase}
+        settings={settings}
+        onSettingsChange={onSettingsChange}
+        onPlayToggle={toggle}
+      />
+    </div>
+  );
+}
