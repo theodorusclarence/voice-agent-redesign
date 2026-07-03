@@ -57,7 +57,7 @@ export function useAgentPreview(): AgentPreview {
   });
 
   return {
-    displayName: name?.trim() || 'Your Agent',
+    displayName: name?.trim() || 'Untitled Agent',
     questionTexts,
     settings,
     onSettingsChange,

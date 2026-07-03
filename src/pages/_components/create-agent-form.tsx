@@ -34,8 +34,8 @@ export interface CreateAgentFormValues {
 }
 
 const defaultValues = (): CreateAgentFormValues => ({
-  name: 'Screening Interview Agent',
-  description: 'Hire faster with automatic calls that assess candidate skills.',
+  name: '',
+  description: '',
   questions: [
     {
       id: nanoid(),

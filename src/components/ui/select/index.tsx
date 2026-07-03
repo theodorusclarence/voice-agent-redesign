@@ -67,8 +67,12 @@ const SelectContent = React.forwardRef<
         'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
         'data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2',
-        position === 'popper' &&
+        position === 'popper' && [
           'data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
+          // Zoom from the anchor corner instead of the center, so the edge
+          // pinned to the trigger doesn't drift during the enter animation.
+          'origin-(--radix-select-content-transform-origin)',
+        ],
         className,
       ])}
       position={position}

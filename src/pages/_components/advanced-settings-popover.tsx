@@ -1,3 +1,4 @@
+import { cn } from 'cnfast';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -7,6 +8,7 @@ import FormSelect from '@/components/ui/forms/select';
 import FormSwitch from '@/components/ui/forms/switch';
 import {
   Popover,
+  PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
@@ -67,10 +69,23 @@ const AdvancedSettingsPopover = React.forwardRef<
 
   return (
     <Popover>
-      <PopoverTrigger asChild ref={ref} {...rest} />
+      {/* Position off a wrapper, not the button: the button's press scale
+          (`active:scale-[0.955]`) shrinks its bounding rect right when the
+          popover opens and measures, then floating-ui re-anchors as it
+          springs back — the open animation jerks. A child transform doesn't
+          move the wrapper's rect, so the anchor stays put. */}
+      <PopoverAnchor asChild>
+        <span className='inline-block w-fit'>
+          <PopoverTrigger asChild ref={ref} {...rest} />
+        </span>
+      </PopoverAnchor>
       <PopoverContent
+        align='start'
         collisionPadding={16}
-        className='w-[420px] max-w-[90vw] p-0'
+        className={cn([
+          'w-[420px] max-w-[90vw] p-0',
+          'max-h-(--radix-popover-content-available-height) overflow-y-auto',
+        ])}
       >
         <div className='divide-y-[0.5px] divide-black/[0.06]'>
           <div className='flex items-start justify-between gap-6 py-4 px-6 pt-6'>
