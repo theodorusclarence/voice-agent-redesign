@@ -10,7 +10,7 @@ import Form from '@/components/ui/forms/form';
 import FormInput from './index';
 
 const meta = {
-  title: 'Components/FormInput',
+  title: 'Components/Form/FormInput',
   component: FormInput,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormInput>;

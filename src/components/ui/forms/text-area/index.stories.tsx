@@ -8,7 +8,7 @@ import Form from '@/components/ui/forms/form';
 import FormTextArea from './index';
 
 const meta = {
-  title: 'Components/FormTextArea',
+  title: 'Components/Form/FormTextArea',
   component: FormTextArea,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormTextArea>;

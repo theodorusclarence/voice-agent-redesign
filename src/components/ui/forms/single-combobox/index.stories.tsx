@@ -8,7 +8,7 @@ import Form from '@/components/ui/forms/form';
 import FormSingleCombobox from './index';
 
 const meta = {
-  title: 'Components/FormSingleCombobox',
+  title: 'Components/Form/FormSingleCombobox',
   component: FormSingleCombobox,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormSingleCombobox>;

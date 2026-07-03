@@ -8,7 +8,7 @@ import Form from '@/components/ui/forms/form';
 import FormCheckbox from './index';
 
 const meta = {
-  title: 'Components/FormCheckbox',
+  title: 'Components/Form/FormCheckbox',
   component: FormCheckbox,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormCheckbox>;

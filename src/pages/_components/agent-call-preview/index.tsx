@@ -3,6 +3,8 @@ import * as React from 'react';
 
 import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mask';
 
+import Typography from '@/components/ui/typography';
+
 import { AgentBubble } from './_components/agent-bubble';
 import { AnswerBubble } from './_components/answer-bubble';
 import { VoiceDeliveryCard } from './_components/voice-delivery-card';
@@ -75,16 +77,19 @@ export default function AgentCallPreview({
 
   return (
     <div className={cn(['relative flex h-full min-h-0 flex-col', className])}>
-      {/* Centered, phone-call-style header — identity (icon + name) already
-          lives on the left panel, so this reads as the live call instead. */}
       <header className='flex flex-none flex-col items-center gap-1 pb-1 pt-0.5 text-center'>
-        <div className='max-w-full truncate text-[17px] font-medium text-white'>
+        {/* s2 supplies the weight; the 17px size is bespoke to this header */}
+        <Typography
+          as='h2'
+          variant='s2'
+          className='max-w-full truncate text-[17px] text-white'
+        >
           {displayName}
-        </div>
+        </Typography>
         <div className='flex items-center gap-2'>
-          <span className='text-xs text-neutral-400'>
+          <Typography as='span' variant='c1' className='text-neutral-400'>
             {playing ? 'On the call' : 'Call preview'}
-          </span>
+          </Typography>
         </div>
       </header>
 

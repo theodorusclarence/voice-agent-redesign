@@ -8,7 +8,7 @@ import Form from '@/components/ui/forms/form';
 import FormSwitch from './index';
 
 const meta = {
-  title: 'Components/FormSwitch',
+  title: 'Components/Form/FormSwitch',
   component: FormSwitch,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormSwitch>;

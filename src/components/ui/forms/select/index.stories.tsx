@@ -8,7 +8,7 @@ import Form from '@/components/ui/forms/form';
 import FormSelect from './index';
 
 const meta = {
-  title: 'Components/FormSelect',
+  title: 'Components/Form/FormSelect',
   component: FormSelect,
   tags: ['autodocs'],
 } satisfies Meta<typeof FormSelect>;

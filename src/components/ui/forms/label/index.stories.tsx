@@ -5,7 +5,7 @@ import Input from '@/components/ui/input';
 import FormLabel from './index';
 
 const meta = {
-  title: 'Components/FormLabel',
+  title: 'Components/Form/FormLabel',
   component: FormLabel,
   tags: ['autodocs'],
   argTypes: {
