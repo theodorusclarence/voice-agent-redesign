@@ -1,5 +1,6 @@
 import {
   ArrowDown01Icon,
+  Mic01Icon,
   PauseIcon,
   PlayIcon,
 } from '@hugeicons/core-free-icons';
@@ -9,6 +10,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
 
 import { getFrostBorder } from '@/components/ui/frost-border/class';
+import Typography from '@/components/ui/typography';
 
 import {
   DURATION_OPTIONS,
@@ -164,7 +166,43 @@ export function VoiceDeliveryCard({
             <div
               className={clsx(['grid grid-cols-2 gap-2.5', 'px-4 pb-4 pt-1'])}
             >
-              {rows.map((row) => (
+              <SettingRow
+                label={rows[0].label}
+                value={settings[rows[0].key]}
+                options={rows[0].options}
+                onPick={(value) => onSettingsChange({ [rows[0].key]: value })}
+              />
+
+              {/* Styled by hand to sit flush with the SettingRow dropdowns —
+                  the shared Button variants are light-theme only. */}
+              <div className='flex flex-col gap-1.5'>
+                <Typography
+                  variant='c1'
+                  className='font-medium text-neutral-400'
+                >
+                  Custom voice
+                </Typography>
+                <button
+                  type='button'
+                  className={cn([
+                    'flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-sm',
+                    'border-white/10 bg-white/6 text-white transition',
+                    'hover:border-white/25',
+                    'ring-offset-0 focus:outline-none',
+                    'focus-visible:border-primary-500 focus-visible:ring-4 focus-visible:ring-primary-500/25',
+                  ])}
+                >
+                  <HugeiconsIcon
+                    icon={Mic01Icon}
+                    size={15}
+                    className='flex-none text-primary-400'
+                  />
+                  <span className='min-w-0 flex-1 truncate text-left'>
+                    Record your own
+                  </span>
+                </button>
+              </div>
+              {rows.slice(1, 5).map((row) => (
                 <SettingRow
                   key={row.key}
                   label={row.label}

@@ -56,6 +56,7 @@ export function AgentBubble({
       </div>
       <div
         className={cn([
+          'w-fit',
           'rounded-[5px_16px_16px_16px] border-[0.5px] pt-1.5 pl-2.5 pr-3 pb-2 text-sm leading-normal',
           'transition-colors duration-300',
           active
