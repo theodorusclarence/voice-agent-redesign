@@ -40,6 +40,13 @@ import {
   type QuestionsAction,
   removeEmptyQuestion,
 } from './_utils/question-actions';
+import {
+  createQuestionHistory,
+  type QuestionSnapshot,
+  recordCommit,
+  redo as redoHistory,
+  undo as undoHistory,
+} from './_utils/question-history';
 
 export type { Question } from './_components/types';
 
@@ -89,6 +96,48 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
         onQuestionsChange?.(next);
       },
       [isControlled, onQuestionsChange]
+    );
+
+    // List-level undo/redo: native textarea undo can't bring back a removed
+    // row or unwind a bulk paste, so every commit snapshots the whole list.
+    // The bookkeeping (coalescing, limits, redo invalidation) is pure and
+    // unit-tested in `_utils/question-history`; this wires it to state/focus.
+    const history = React.useRef(createQuestionHistory());
+
+    const currentSnapshot = React.useCallback((): QuestionSnapshot => {
+      const active = document.activeElement;
+      const focusId =
+        Object.keys(inputs.current).find(
+          (key) => inputs.current[key] === active
+        ) ?? null;
+      return { questions, focusId };
+    }, [questions]);
+
+    const commitWithHistory = React.useCallback(
+      (next: Question[], coalesceRowId?: string) => {
+        recordCommit(history.current, currentSnapshot(), coalesceRowId);
+        commit(next);
+      },
+      [commit, currentSnapshot]
+    );
+
+    const restore = React.useCallback(
+      (entry: QuestionSnapshot | null) => {
+        if (!entry) return false;
+        pendingFocus.current = entry.focusId;
+        commit(entry.questions);
+        return true;
+      },
+      [commit]
+    );
+
+    const undo = React.useCallback(
+      () => restore(undoHistory(history.current, currentSnapshot())),
+      [restore, currentSnapshot]
+    );
+    const redo = React.useCallback(
+      () => restore(redoHistory(history.current, currentSnapshot())),
+      [restore, currentSnapshot]
     );
 
     // Focus a row after it is inserted/removed via the keyboard.
@@ -147,7 +196,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
         switch (action.type) {
           case 'commit':
             pendingFocus.current = action.focusId;
-            commit(action.questions);
+            commitWithHistory(action.questions);
             break;
           case 'attention':
             inputs.current[action.id]?.focus();
@@ -157,14 +206,17 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
             break;
         }
       },
-      [commit, wiggleRow]
+      [commitWithHistory, wiggleRow]
     );
 
     const handleTextChange = React.useCallback(
       (id: string, text: string) => {
-        commit(questions.map((q) => (q.id === id ? { ...q, text } : q)));
+        commitWithHistory(
+          questions.map((q) => (q.id === id ? { ...q, text } : q)),
+          id
+        );
       },
-      [commit, questions]
+      [commitWithHistory, questions]
     );
 
     // Move focus to the row above/below. Up lands at the end of the target
@@ -187,7 +239,16 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
         const question = questions.find((q) => q.id === id);
         if (!question) return;
 
-        if (e.key === 'Enter') {
+        if (
+          (e.metaKey || e.ctrlKey) &&
+          !e.altKey &&
+          e.key.toLowerCase() === 'z'
+        ) {
+          // Replace native per-textarea undo: the list history covers text
+          // edits too (coalesced), and can restore added/removed rows, which
+          // the browser's undo can't. Falls through to native when empty.
+          if (e.shiftKey ? redo() : undo()) e.preventDefault();
+        } else if (e.key === 'Enter') {
           e.preventDefault();
           applyAction(insertQuestionAfter(questions, id));
         } else if (e.key === 'Backspace' && question.text === '') {
@@ -221,7 +282,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           }
         }
       },
-      [questions, applyAction, focusAdjacentRow]
+      [questions, applyAction, focusAdjacentRow, undo, redo]
     );
 
     // Newline-separated pastes create one row per line; single-line pastes fall
@@ -260,7 +321,8 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       if (over && active.id !== over.id) {
         const from = questions.findIndex((q) => q.id === active.id);
         const to = questions.findIndex((q) => q.id === over.id);
-        if (from !== -1 && to !== -1) commit(arrayMove(questions, from, to));
+        if (from !== -1 && to !== -1)
+          commitWithHistory(arrayMove(questions, from, to));
       }
     };
 
