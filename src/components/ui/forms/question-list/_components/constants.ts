@@ -2,8 +2,7 @@ import type { Announcements, ScreenReaderInstructions } from '@dnd-kit/core';
 
 import type { Question } from './types';
 
-/** stride = row height (52) + gap (8) — matches the design's 60px rhythm. */
-export const ROW_HEIGHT = 52;
+export const ROW_HEIGHT = 42;
 
 export const screenReaderInstructions: ScreenReaderInstructions = {
   draggable:

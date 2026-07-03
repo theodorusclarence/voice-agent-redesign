@@ -68,7 +68,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
     // it previews the projected position and is already correct at release.
     const [overId, setOverId] = React.useState<string | null>(null);
     const pendingFocus = React.useRef<string | null>(null);
-    const inputs = React.useRef<Record<string, HTMLInputElement | null>>({});
+    const inputs = React.useRef<Record<string, HTMLTextAreaElement | null>>({});
 
     const commit = React.useCallback(
       (next: Question[]) => {
@@ -108,7 +108,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
     );
 
     const registerInput = React.useCallback(
-      (id: string, el: HTMLInputElement | null) => {
+      (id: string, el: HTMLTextAreaElement | null) => {
         inputs.current[id] = el;
       },
       []
@@ -155,7 +155,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
     );
 
     const handleKeyDown = React.useCallback(
-      (id: string, e: React.KeyboardEvent<HTMLInputElement>) => {
+      (id: string, e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         const question = questions.find((q) => q.id === id);
         if (!question) return;
 
@@ -173,7 +173,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
     // Newline-separated pastes create one row per line; single-line pastes fall
     // through to native handling (so the caret/undo behave normally).
     const handlePaste = React.useCallback(
-      (id: string, e: React.ClipboardEvent<HTMLInputElement>) => {
+      (id: string, e: React.ClipboardEvent<HTMLTextAreaElement>) => {
         const text = e.clipboardData.getData('text');
         if (!text.includes('\n')) return;
         e.preventDefault();
@@ -305,7 +305,7 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
           </DragOverlay>
         </DndContext>
 
-        <AddQuestionButton onClick={handleAdd} className='mt-2' />
+        <AddQuestionButton onClick={handleAdd} className='mt-2.5' />
       </div>
     );
   }
