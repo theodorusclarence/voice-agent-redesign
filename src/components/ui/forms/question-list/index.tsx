@@ -43,6 +43,19 @@ import {
 
 export type { Question } from './_components/types';
 
+/**
+ * Visual lines the autosized row currently renders. Rows wrap without
+ * newlines, so the only way to know is from the rendered height.
+ */
+function countVisualLines(el: HTMLTextAreaElement) {
+  const style = window.getComputedStyle(el);
+  const lineHeight = parseFloat(style.lineHeight) || 20;
+  const padding =
+    (parseFloat(style.paddingTop) || 0) +
+    (parseFloat(style.paddingBottom) || 0);
+  return Math.max(1, Math.round((el.clientHeight - padding) / lineHeight));
+}
+
 export interface QuestionListProps {
   /** Uncontrolled initial questions. */
   defaultQuestions?: Question[];
@@ -154,6 +167,21 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
       [commit, questions]
     );
 
+    // Move focus to the row above/below. Up lands at the end of the target
+    // (its nearest edge), down at the start.
+    const focusAdjacentRow = React.useCallback(
+      (index: number, dir: -1 | 1) => {
+        const target = questions[index + dir];
+        const el = target ? inputs.current[target.id] : null;
+        if (!el) return false;
+        el.focus();
+        const pos = dir === -1 ? el.value.length : 0;
+        el.setSelectionRange(pos, pos);
+        return true;
+      },
+      [questions]
+    );
+
     const handleKeyDown = React.useCallback(
       (id: string, e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         const question = questions.find((q) => q.id === id);
@@ -165,9 +193,35 @@ const QuestionList = React.forwardRef<HTMLDivElement, QuestionListProps>(
         } else if (e.key === 'Backspace' && question.text === '') {
           e.preventDefault();
           applyAction(removeEmptyQuestion(questions, id));
+        } else if (
+          (e.key === 'ArrowUp' || e.key === 'ArrowDown') &&
+          !e.shiftKey &&
+          !e.altKey &&
+          !e.metaKey &&
+          !e.ctrlKey
+        ) {
+          // Arrow between rows. Rows wrap without literal newlines, so a
+          // wrapped row keeps native caret movement until the caret reaches
+          // the boundary (start for up, end for down) — the browser parks it
+          // there when arrowing past the first/last visual line, and the next
+          // press jumps rows. Single-line rows jump right away.
+          const el = e.currentTarget;
+          const dir = e.key === 'ArrowUp' ? -1 : 1;
+          const caret = el.selectionStart ?? 0;
+          if (el.selectionStart !== el.selectionEnd) return;
+          const atEdge = dir === -1 ? caret === 0 : caret === el.value.length;
+          if (!atEdge && countVisualLines(el) > 1) return;
+          if (
+            focusAdjacentRow(
+              questions.findIndex((q) => q.id === id),
+              dir
+            )
+          ) {
+            e.preventDefault();
+          }
         }
       },
-      [questions, applyAction]
+      [questions, applyAction, focusAdjacentRow]
     );
 
     // Newline-separated pastes create one row per line; single-line pastes fall

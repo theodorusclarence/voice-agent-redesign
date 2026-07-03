@@ -32,8 +32,26 @@ describe('insertQuestionAfter', () => {
     });
   });
 
+  it('targets an existing empty row for attention instead of inserting', () => {
+    const questions = [q('a', 'A'), q('b', ''), q('c', 'C')];
+    expect(insertQuestionAfter(questions, 'c', idFactory())).toEqual({
+      type: 'attention',
+      id: 'b',
+    });
+  });
+
+  it('asks for attention on the current row when Enter is pressed while it is empty', () => {
+    const questions = [q('a', 'A'), q('b', '')];
+    expect(insertQuestionAfter(questions, 'b', idFactory())).toEqual({
+      type: 'attention',
+      id: 'b',
+    });
+  });
+
   it('is a no-op for an unknown id', () => {
-    expect(insertQuestionAfter([q('a')], 'nope')).toEqual({ type: 'none' });
+    expect(insertQuestionAfter([q('a', 'A')], 'nope')).toEqual({
+      type: 'none',
+    });
   });
 
   it('does not mutate the input array', () => {

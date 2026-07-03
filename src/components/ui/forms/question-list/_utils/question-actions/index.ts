@@ -15,7 +15,11 @@ export type QuestionsAction =
   | { type: 'attention'; id: string }
   | { type: 'none' };
 
-/** Enter: insert a blank row directly after `id` and focus it. */
+/**
+ * Enter: insert a blank row directly after `id` and focus it. Same rule as
+ * the Add button: if a blank row already exists (the current one included),
+ * don't stack another — focus and wiggle it instead.
+ */
 export function insertQuestionAfter(
   questions: Question[],
   id: string,
@@ -23,6 +27,9 @@ export function insertQuestionAfter(
 ): QuestionsAction {
   const index = questions.findIndex((q) => q.id === id);
   if (index === -1) return { type: 'none' };
+
+  const empty = questions.find((q) => q.text === '');
+  if (empty) return { type: 'attention', id: empty.id };
 
   const focusId = newId();
   const next = questions.slice();

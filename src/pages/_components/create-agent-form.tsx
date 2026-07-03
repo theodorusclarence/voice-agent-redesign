@@ -207,6 +207,7 @@ export default function CreateAgentForm({
             label='Knowledge'
             showOptionalLabel
             minRows={3}
+            maxRows={8}
             placeholder='Background info the agent can lean on — product details, FAQs, docs…'
             {...form.register('knowledge')}
           />
@@ -224,6 +225,7 @@ export default function CreateAgentForm({
           label='Instructions'
           showOptionalLabel
           minRows={3}
+          maxRows={8}
           placeholder='How should the agent behave? Tone, rules, things to avoid…'
           {...form.register('instructions')}
         />

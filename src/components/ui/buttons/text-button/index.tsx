@@ -20,6 +20,7 @@ export const TextButton = React.forwardRef<HTMLButtonElement, TextButtonProps>(
         className={cn([
           'select-none transition-colors',
           'hover:underline disabled:cursor-not-allowed disabled:hover:no-underline',
+          'rounded-sm',
 
           variant === 'primary' &&
             'text-primary-600 active:text-primary-700 disabled:text-primary-300',
