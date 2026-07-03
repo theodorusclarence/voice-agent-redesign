@@ -110,7 +110,12 @@ export function VoiceDeliveryCard({
             'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2]',
           ])}
         >
-          <HugeiconsIcon icon={playing ? PauseIcon : PlayIcon} size={18} />
+          <HugeiconsIcon
+            icon={playing ? PauseIcon : PlayIcon}
+            fill='currentColor'
+            className='drop-shadow-sm'
+            size={20}
+          />
         </button>
       </div>
 

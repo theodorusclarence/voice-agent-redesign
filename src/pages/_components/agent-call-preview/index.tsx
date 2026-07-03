@@ -5,8 +5,6 @@ import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mas
 
 import { AgentBubble } from './_components/agent-bubble';
 import { AnswerBubble } from './_components/answer-bubble';
-import { LANGUAGE_CODES } from './_components/constants';
-import { TypingBubble } from './_components/typing-bubble';
 import { VoiceDeliveryCard } from './_components/voice-delivery-card';
 import type { AgentPreview } from './_utils/use-agent-preview';
 
@@ -44,15 +42,23 @@ export default function AgentCallPreview({
     const active = playing && i === step && phase === 'ask';
     turns.push(
       <AgentBubble
-        key={`agent-${i}`}
-        name={displayName}
+        // Keyed on play mode so the first question — already on screen from
+        // the idle transcript — remounts and word-animates when play starts.
+        key={playing ? `agent-live-${i}` : `agent-${i}`}
         text={text}
         active={active}
+        animated={playing}
       />
     );
-    if (!playing || i < step) turns.push(<AnswerBubble key={`answer-${i}`} />);
+    // Same key (and layoutId prefix) across phases: the typing bubble is the
+    // answer bubble in its `typing` state, so the dots morph into the
+    // skeleton lines instead of a swap.
+    if (!playing || i < step)
+      turns.push(<AnswerBubble key={`answer-${i}`} id={`answer-${i}`} />);
     else if (i === step && phase === 'answer')
-      turns.push(<TypingBubble key={`answer-${i}`} />);
+      turns.push(
+        <AnswerBubble key={`answer-${i}`} id={`answer-${i}`} typing />
+      );
   }
 
   // Top-only fade: bubbles dissolve under the header when scrolled, but stay
@@ -72,21 +78,12 @@ export default function AgentCallPreview({
       {/* Centered, phone-call-style header — identity (icon + name) already
           lives on the left panel, so this reads as the live call instead. */}
       <header className='flex flex-none flex-col items-center gap-1 pb-1 pt-0.5 text-center'>
-        <div className='max-w-full truncate text-[17px] font-bold text-white'>
+        <div className='max-w-full truncate text-[17px] font-medium text-white'>
           {displayName}
         </div>
         <div className='flex items-center gap-2'>
-          <div
-            className={cn([
-              'size-[7px] rounded-full transition-all duration-300',
-              playing
-                ? 'bg-primary-500 shadow-[0_0_7px_var(--color-primary-500)]'
-                : 'bg-white/30',
-            ])}
-          />
           <span className='text-xs text-neutral-400'>
-            {playing ? 'On the call' : 'Call preview'} · {settings.voice} ·{' '}
-            {LANGUAGE_CODES[settings.language] ?? 'EN'}
+            {playing ? 'On the call' : 'Call preview'}
           </span>
         </div>
       </header>

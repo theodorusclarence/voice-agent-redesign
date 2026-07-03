@@ -91,7 +91,7 @@ const FormTextArea = React.forwardRef<HTMLTextAreaElement, FormTextAreaProps>(
               maxRows={maxRows}
               className={cn([
                 !unstyled && [
-                  'w-full resize-none rounded-xl text-sm',
+                  'w-full resize-none rounded-2xl text-sm',
                   'border transition',
                   // Colors — mirrors `ui/input` so both controls read the same
                   [

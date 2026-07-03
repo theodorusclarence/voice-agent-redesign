@@ -107,7 +107,12 @@ export default function CreateAgentForm({
             'max-sm:size-10 max-sm:rounded-lg',
           ])}
         >
-          <FirefliesLogo className='size-8 max-sm:size-6 text-neutral-600' />
+          <FirefliesLogo
+            className={clsx([
+              'translate-x-px translate-y-px', // optical balance
+              'size-8 max-sm:size-6 text-neutral-600',
+            ])}
+          />
           <span
             className={cn([
               'absolute right-0 translate-x-1/3 bottom-0 flex size-5 items-center justify-center rounded-md',
@@ -123,7 +128,7 @@ export default function CreateAgentForm({
             label={null}
             classNames={{
               textArea:
-                'text-2xl font-semibold  hide-scrollbar leading-tight placeholder:text-neutral-300',
+                'text-2xl font-medium tracking-tight hide-scrollbar leading-tight placeholder:text-neutral-300',
             }}
             placeholder='Untitled agent'
             // A heading wraps, it doesn't take literal newlines.
@@ -141,7 +146,7 @@ export default function CreateAgentForm({
             label={null}
             className='mt-1'
             classNames={{
-              textArea: 'text-sm hide-scrollbar  leading-snug text-neutral-500',
+              textArea: 'text-sm hide-scrollbar leading-snug text-neutral-500',
             }}
             placeholder='Add a short description of what this agent does…'
             spellCheck={false}
@@ -164,8 +169,7 @@ export default function CreateAgentForm({
           'mt-6 flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto py-1',
           'pb-24 lg:pb-8', // clear the floating preview bar on mobile
           'overscroll-none',
-          // 3*4px -> offset px-3, 5*4px -> px-5, 10*4px -> px-10
-          'px-[calc(3*4px_+_5*4px)] sm:px-[calc(3*4px_+_10*4px)]', // keep focus rings from clipping at the scroll container's edges
+          'px-5 sm:px-10', // keep focus rings from clipping at the scroll container's edges
           'hide-scrollbar',
         ])}
       >

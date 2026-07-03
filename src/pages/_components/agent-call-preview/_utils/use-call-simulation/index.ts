@@ -21,8 +21,8 @@ const IDLE: CallState = {
   elapsed: 0,
 };
 
-const ASK_SECONDS = 2;
-const ANSWER_SECONDS = 3;
+const ASK_SECONDS = 1.1;
+const ANSWER_SECONDS = 1.4;
 
 /**
  * Fake-call state machine for the preview: each question is "asked" for a
