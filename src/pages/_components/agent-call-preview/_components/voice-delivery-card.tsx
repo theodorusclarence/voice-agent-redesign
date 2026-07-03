@@ -97,10 +97,12 @@ export function VoiceDeliveryCard({
           <PixelLoader playing={playing} size={4.5} gap={3} n={4} />
         </div>
         <div className='min-w-0 flex-1'>
-          <div className='truncate text-[15px] font-medium text-white'>
+          <Typography variant='s3' className='truncate text-white'>
             {statusTitle}
-          </div>
-          <div className='c1 text-neutral-400'>{statusSub}</div>
+          </Typography>
+          <Typography variant='c1' className='text-neutral-400'>
+            {statusSub}
+          </Typography>
         </div>
         <Button
           variant='primary'
@@ -132,15 +134,23 @@ export function VoiceDeliveryCard({
           'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500/[0.16]',
         ])}
       >
-        <span className='flex-none text-[13px] font-medium text-white'>
+        <Typography
+          as='span'
+          variant='s3'
+          className='flex-none text-[13px] text-white'
+        >
           Voice and delivery
-        </span>
+        </Typography>
         {expanded ? (
           <span className='flex-1' />
         ) : (
-          <span className='c1 mr-1 min-w-0 flex-1 truncate text-right text-neutral-400'>
+          <Typography
+            as='span'
+            variant='c1'
+            className='mr-1 min-w-0 flex-1 truncate text-right text-neutral-400'
+          >
             {summary}
-          </span>
+          </Typography>
         )}
         <HugeiconsIcon
           icon={ArrowDown01Icon}

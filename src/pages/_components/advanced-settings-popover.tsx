@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import Typography from '@/components/ui/typography';
 
 import { type CreateAgentFormValues } from '@/pages/_components/create-agent-form';
 
@@ -40,12 +41,14 @@ function SettingHeading({
 }) {
   return (
     <div>
-      <label
+      <Typography
+        as='label'
+        variant='s3'
         htmlFor={htmlFor}
-        className='block text-sm font-medium text-neutral-800'
+        className='block text-neutral-800'
       >
         {title}
-      </label>
+      </Typography>
       <FormHelperText className='mt-0.5'>{description}</FormHelperText>
     </div>
   );

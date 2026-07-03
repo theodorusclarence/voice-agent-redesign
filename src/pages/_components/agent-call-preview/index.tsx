@@ -81,8 +81,8 @@ export default function AgentCallPreview({
         {/* s2 supplies the weight; the 17px size is bespoke to this header */}
         <Typography
           as='h2'
-          variant='s2'
-          className='max-w-full truncate text-[17px] text-white'
+          variant='s1'
+          className='max-w-full truncate text-white'
         >
           {displayName}
         </Typography>

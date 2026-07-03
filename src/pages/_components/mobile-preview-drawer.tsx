@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Drawer } from 'vaul';
 
 import Button from '@/components/ui/buttons/button';
+import Typography from '@/components/ui/typography';
 
 import AgentCallPreview from '@/pages/_components/agent-call-preview';
 import { PixelLoader } from '@/pages/_components/agent-call-preview/_components/pixel-loader';
@@ -61,10 +62,12 @@ export default function MobilePreviewDrawer({
           <PixelLoader playing={playing} size={4.5} gap={3} n={4} />
         </div>
         <div className='pointer-events-none min-w-0 flex-1'>
-          <div className='truncate text-sm font-medium text-white'>
+          <Typography variant='s3' className='truncate text-white'>
             {statusTitle}
-          </div>
-          <div className='c1 truncate text-neutral-400'>{statusSub}</div>
+          </Typography>
+          <Typography variant='c1' className='truncate text-neutral-400'>
+            {statusSub}
+          </Typography>
         </div>
         <Button
           variant='primary'

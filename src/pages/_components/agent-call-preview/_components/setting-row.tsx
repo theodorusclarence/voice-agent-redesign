@@ -2,6 +2,7 @@ import { cn } from 'cnfast';
 import * as React from 'react';
 
 import SingleCombobox from '@/components/ui/combobox/single';
+import Typography from '@/components/ui/typography';
 
 /**
  * Labelled dropdown for one Voice & delivery setting — the shared combobox
@@ -20,12 +21,14 @@ export function SettingRow({
 }) {
   return (
     <div className='flex flex-col gap-1.5'>
-      <label
+      <Typography
+        as='label'
+        variant='c1'
         htmlFor={`${label}-combobox`}
-        className='c1 w-16 flex-none font-medium text-neutral-400'
+        className='w-16 flex-none font-medium text-neutral-400'
       >
         {label}
-      </label>
+      </Typography>
       <SingleCombobox
         className='flex-1'
         id={`${label}-combobox`}

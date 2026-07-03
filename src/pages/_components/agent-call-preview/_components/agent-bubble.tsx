@@ -2,6 +2,8 @@ import { cn } from 'cnfast';
 import { motion, type Variants } from 'motion/react';
 import * as React from 'react';
 
+import Typography from '@/components/ui/typography';
+
 import { SpeakingBars } from './speaking-bars';
 
 const bubbleVariants: Variants = {
@@ -49,9 +51,13 @@ export function AgentBubble({
       className='flex max-w-[88%] flex-col gap-1.5 self-start shrink-0'
     >
       <div className='flex items-center gap-2 pl-1'>
-        <span className='c2 font-normal tracking-wide text-neutral-400'>
+        <Typography
+          as='span'
+          variant='c2'
+          className='font-normal tracking-wide text-neutral-400'
+        >
           Voice Agent
-        </span>
+        </Typography>
         {active && <SpeakingBars />}
       </div>
       <div
