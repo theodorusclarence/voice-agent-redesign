@@ -101,7 +101,7 @@ const FormCheckbox = React.forwardRef<HTMLButtonElement, FormCheckboxProps>(
           {withLabel && (
             <FormLabel
               htmlFor={labelId}
-              className={cn(['block', classNames?.label])}
+              className={cn(['block font-normal', classNames?.label])}
               disabled={disabled}
               optional={showOptionalLabel}
             >

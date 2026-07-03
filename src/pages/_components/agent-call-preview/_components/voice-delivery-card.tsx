@@ -96,7 +96,7 @@ export function VoiceDeliveryCard({
           <PixelLoader playing={playing} size={4.5} gap={3} n={4} />
         </div>
         <div className='min-w-0 flex-1'>
-          <div className='truncate text-[15px] font-semibold text-white'>
+          <div className='truncate text-[15px] font-medium text-white'>
             {statusTitle}
           </div>
           <div className='c1 text-neutral-400'>{statusSub}</div>

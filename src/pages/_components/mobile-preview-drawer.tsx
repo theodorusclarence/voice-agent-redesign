@@ -59,7 +59,7 @@ export default function MobilePreviewDrawer({
           <PixelLoader playing={playing} size={4.5} gap={3} n={4} />
         </div>
         <div className='pointer-events-none min-w-0 flex-1'>
-          <div className='truncate text-sm font-bold text-white'>
+          <div className='truncate text-sm font-medium text-white'>
             {statusTitle}
           </div>
           <div className='c1 truncate text-neutral-400'>{statusSub}</div>

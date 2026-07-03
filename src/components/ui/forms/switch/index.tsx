@@ -99,7 +99,7 @@ const FormSwitch = React.forwardRef<HTMLButtonElement, FormSwitchProps>(
           {withLabel && (
             <FormLabel
               htmlFor={labelId}
-              className={cn(['block', classNames?.label])}
+              className={cn(['block font-normal', classNames?.label])}
               disabled={disabled}
               optional={showOptionalLabel}
             >
