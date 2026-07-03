@@ -4,9 +4,11 @@ import {
   PlayIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { cn } from 'cnfast';
+import { clsx, cn } from 'cnfast';
 import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
+
+import { getFrostBorder } from '@/components/ui/frost-border/class';
 
 import {
   DURATION_OPTIONS,
@@ -66,13 +68,33 @@ export function VoiceDeliveryCard({
   ];
 
   return (
-    <div className='flex-none rounded-2xl border border-white/10 bg-white/5'>
-      <div className='flex items-center gap-3.5 p-3'>
-        <div className='flex size-11 flex-none items-center justify-center rounded-xl bg-white/5'>
-          <PixelLoader playing={playing} />
+    <div
+      className={clsx([
+        getFrostBorder().getClassName([
+          'relative',
+          'flex-none rounded-2xl backdrop-blur-xl',
+          'before:opacity-20',
+          '-mx-2 -mb-2',
+        ]),
+      ])}
+      style={getFrostBorder().getStyle()}
+    >
+      <div
+        className={clsx([
+          'pointer-events-none select-none',
+          'absolute inset-0 overflow-hidden rounded-[inherit]',
+          "before:content-['']",
+          'before:opacity-12 before:transition-opacity before:duration-200',
+          'before:absolute before:inset-0 before:rounded-[inherit]',
+          'before:bg-[radial-gradient(circle_at_15%_0%,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_65%)]',
+        ])}
+      />
+      <div className='flex items-center gap-3 p-3'>
+        <div className='flex size-10 flex-none items-center justify-center rounded-xl'>
+          <PixelLoader playing={playing} size={4.5} gap={3} n={4} />
         </div>
         <div className='min-w-0 flex-1'>
-          <div className='truncate text-[15px] font-bold text-white'>
+          <div className='truncate text-[15px] font-semibold text-white'>
             {statusTitle}
           </div>
           <div className='c1 text-neutral-400'>{statusSub}</div>
@@ -83,20 +105,29 @@ export function VoiceDeliveryCard({
           aria-label={playing ? 'Pause preview' : 'Play preview'}
           className={cn([
             'flex size-11 flex-none items-center justify-center rounded-full',
-            'bg-primary-500 text-white transition-colors hover:bg-primary-400',
+            'bg-primary-500 text-white transition-colors hover:bg-primary-500/90',
+            'ring-offset-0 focus:outline-none',
+            'focus-visible:ring-4 focus-visible:ring-primary-500/[0.2]',
           ])}
         >
           <HugeiconsIcon icon={playing ? PauseIcon : PlayIcon} size={18} />
         </button>
       </div>
 
-      <button
+      <motion.button
+        animate={{
+          borderRadius: expanded ? '0' : '0 0 16px 16px',
+        }}
         type='button'
         onClick={() => setExpanded((prev) => !prev)}
-        className='flex w-full items-center gap-2.5 border-t border-white/10 px-4 py-3 text-left'
+        className={clsx([
+          'flex w-full items-center gap-2.5 border-t-[0.5px] border-white/10 px-4 py-3 text-left',
+          'ring-offset-0',
+          'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500/[0.16]',
+        ])}
       >
-        <span className='flex-none text-[13px] font-bold text-white'>
-          Voice & delivery
+        <span className='flex-none text-[13px] font-medium text-white'>
+          Voice and delivery
         </span>
         {expanded ? (
           <span className='flex-1' />
@@ -113,7 +144,7 @@ export function VoiceDeliveryCard({
             expanded && 'rotate-180',
           ])}
         />
-      </button>
+      </motion.button>
 
       <AnimatePresence initial={false}>
         {expanded && (
@@ -121,11 +152,13 @@ export function VoiceDeliveryCard({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
             // the dropdowns render in a portal, so clipping is safe here
             className='overflow-hidden'
           >
-            <div className='flex flex-col gap-2.5 px-4 pb-4 pt-1'>
+            <div
+              className={clsx(['grid grid-cols-2 gap-2.5', 'px-4 pb-4 pt-1'])}
+            >
               {rows.map((row) => (
                 <SettingRow
                   key={row.key}

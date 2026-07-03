@@ -59,9 +59,11 @@ export function useCallSimulation({
             phaseElapsed = 0;
           }
         } else if (phaseElapsed >= ANSWER_SECONDS) {
+          // last answer done — the call is over, back to the paused state
+          if (step + 1 >= questionCount) return IDLE;
           phase = 'ask';
           phaseElapsed = 0;
-          step = (step + 1) % questionCount;
+          step = step + 1;
         }
         if (elapsed >= limits.current.durationSecs) return IDLE;
         return { ...state, step, phase, phaseElapsed, elapsed };

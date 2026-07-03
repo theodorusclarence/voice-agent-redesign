@@ -52,7 +52,6 @@ export function PixelLoader({
             style={{
               width: size,
               height: size,
-              borderRadius: Math.max(2, Math.round(size * 0.24)),
               opacity: on ? 1 : 0.08,
               transform: on ? 'scale(1)' : 'scale(0.58)',
               boxShadow: on

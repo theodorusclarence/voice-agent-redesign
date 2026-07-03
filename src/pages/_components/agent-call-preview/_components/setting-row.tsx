@@ -19,12 +19,16 @@ export function SettingRow({
   onPick: (value: string) => void;
 }) {
   return (
-    <div className='flex items-center gap-3.5'>
-      <span className='c1 w-16 flex-none font-semibold text-neutral-400'>
+    <div className='flex flex-col gap-1.5'>
+      <label
+        htmlFor={`${label}-combobox`}
+        className='c1 w-16 flex-none font-medium text-neutral-400'
+      >
         {label}
-      </span>
+      </label>
       <SingleCombobox
         className='flex-1'
+        id={`${label}-combobox`}
         trigger='button'
         value={value}
         setValue={onPick}
@@ -32,7 +36,7 @@ export function SettingRow({
         placeholder={{ search: `Search ${label.toLowerCase()}…` }}
         classNames={{
           trigger: cn([
-            'border-white/10 bg-white/6 text-white font-semibold',
+            'border-white/10 bg-white/6 text-white',
             'hover:border-white/25 focus:border-primary-500',
             'focus:ring-primary-500/25',
           ]),
@@ -43,7 +47,9 @@ export function SettingRow({
           commandWrapper: cn([
             'bg-neutral-800 text-white',
             // the command building blocks are light-only; recolor them from here
-            '[&>div:first-child]:border-white/10', // search input's border-b
+            // search row's border-b separator; cmdk puts a hidden <label>
+            // before it, so it's the first div but not the first child
+            '[&>div:first-of-type]:border-white/10',
             '[&_[cmdk-item]]:text-white',
             '[&_[cmdk-item][data-selected=true]]:bg-white/10',
             '[&_[cmdk-item]_svg]:text-primary-400', // selected tick

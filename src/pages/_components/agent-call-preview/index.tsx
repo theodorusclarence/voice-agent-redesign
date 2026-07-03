@@ -1,6 +1,8 @@
-import { cn } from 'cnfast';
+import { clsx, cn } from 'cnfast';
 import * as React from 'react';
 import { useWatch } from 'react-hook-form';
+
+import { useConditionalVerticalMask } from '@/hooks/use-conditional-vertical-mask';
 
 import { type CreateAgentFormValues } from '@/pages/_components/create-agent-form';
 
@@ -75,16 +77,20 @@ export default function AgentCallPreview({
       turns.push(<TypingBubble key={`answer-${i}`} />);
   }
 
+  // Top-only fade: bubbles dissolve under the header when scrolled, but stay
+  // fully visible at the bottom until they slide under the frost card.
+  const { ref: scrollRef, maskImage } =
+    useConditionalVerticalMask<HTMLDivElement>({ fadeTop: 8, fadeBottom: 0 });
+
   // Keep the newest turn in view as the call plays.
-  const scrollRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     if (!playing) return;
     const el = scrollRef.current;
     el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-  }, [playing, shownCount, phase]);
+  }, [playing, shownCount, phase, scrollRef]);
 
   return (
-    <div className={cn(['flex h-full min-h-0 flex-col', className])}>
+    <div className={cn(['relative flex h-full min-h-0 flex-col', className])}>
       {/* Centered, phone-call-style header — identity (icon + name) already
           lives on the left panel, so this reads as the live call instead. */}
       <header className='flex flex-none flex-col items-center gap-1 pb-1 pt-0.5 text-center'>
@@ -109,18 +115,26 @@ export default function AgentCallPreview({
 
       <div
         ref={scrollRef}
-        className='hide-scrollbar -mx-1 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1 py-5'
+        style={{ maskImage }}
+        // pb clears the collapsed card overlaying the bottom, so the last
+        // bubble stays readable while older ones scroll under its frost.
+        className={clsx([
+          'hide-scrollbar -mx-1 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1 pb-32 pt-5 mb-2',
+          'rounded-b-2xl',
+        ])}
       >
         {turns}
       </div>
 
-      <VoiceDeliveryCard
-        playing={playing}
-        phase={phase}
-        settings={settings}
-        onSettingsChange={onSettingsChange}
-        onPlayToggle={toggle}
-      />
+      <div className='absolute inset-x-0 bottom-0'>
+        <VoiceDeliveryCard
+          playing={playing}
+          phase={phase}
+          settings={settings}
+          onSettingsChange={onSettingsChange}
+          onPlayToggle={toggle}
+        />
+      </div>
     </div>
   );
 }

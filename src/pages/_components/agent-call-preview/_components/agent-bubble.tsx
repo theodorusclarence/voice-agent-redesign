@@ -29,7 +29,7 @@ export function AgentBubble({
       </div>
       <div
         className={cn([
-          'rounded-[5px_16px_16px_16px] border px-4 py-3 text-sm leading-normal',
+          'rounded-[5px_16px_16px_16px] border-[0.5px] pt-1.5 pl-2.5 pr-3 pb-2 text-sm leading-normal',
           'transition-colors duration-300',
           active
             ? 'border-primary-500/50 bg-primary-500/20 text-white'
