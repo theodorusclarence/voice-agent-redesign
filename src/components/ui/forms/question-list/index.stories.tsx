@@ -4,7 +4,7 @@ import * as React from 'react';
 import QuestionList, { Question } from './index';
 
 const meta = {
-  title: 'Forms/QuestionList',
+  title: 'Components/QuestionList',
   component: QuestionList,
   parameters: {
     layout: 'centered',
@@ -24,18 +24,6 @@ const SAMPLE: Question[] = [
 function QuestionsCard({ children }: { children: React.ReactNode }) {
   return (
     <div className='w-[660px] rounded-[22px] border border-black/[0.06] bg-white p-[30px] pb-[26px] shadow-[0_6px_30px_rgba(0,0,0,0.07)]'>
-      <div className='mb-[22px] flex items-start gap-3'>
-        <div className='mt-px flex h-6 w-6 flex-none items-center justify-center rounded-full border-2 border-[#f5a623] text-sm font-bold text-[#f5a623]'>
-          ?
-        </div>
-        <div>
-          <div className='text-base font-bold text-[#141414]'>Questions</div>
-          <div className='mt-0.5 text-[13.5px] text-[#8a8a86]'>
-            Enter the questions you&apos;d like your Voice Agent to ask. Drag to
-            reorder.
-          </div>
-        </div>
-      </div>
       {children}
     </div>
   );

@@ -10,7 +10,7 @@ export function getButtonVariant(variant: (typeof ButtonVariant)[number]) {
     'disabled:cursor-not-allowed',
 
     variant === 'primary' && [
-      'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-700',
+      'bg-primary-500 text-white hover:bg-primary-550 active:bg-primary-550',
       'disabled:border-transparent disabled:bg-neutral-100 disabled:text-neutral-400 disabled:hover:bg-neutral-100 disabled:active:bg-neutral-100',
     ],
 
